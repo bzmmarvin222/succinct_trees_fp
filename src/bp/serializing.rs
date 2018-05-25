@@ -1,9 +1,7 @@
-extern crate bit_vec;
 extern crate serde;
 extern crate serde_json;
+extern crate bv;
 
-use bit_vec::BitVec;
-use bp::wrapper::BpSerializingWrapper;
 
 fn serialize(){
 
@@ -17,15 +15,17 @@ fn deserialize() {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use super::bv::BitVec;
 
     #[test]
-    fn test_serializing_wrapper() {
-        let bitvec = BitVec::from_bytes(&[1111]);
-        let wrapper = BpSerializingWrapper {data: bitvec};
+    fn test_serializer() {
 
-        let serialized = serde_json::to_string(&bitvec).unwrap();
+        let vec: BitVec<u32> = BitVec::new_fill(true, 8);
 
-        // Prints serialized = {"x":1,"y":2}
-        println!("serialized = {}", serialized);
+
+        let serialized = serde_json::to_string(&vec).unwrap();
+        let deserialized: BitVec<u32> = serde_json::from_str(&serialized).unwrap();
+
+        assert_eq!(deserialized, vec);
     }
 }
