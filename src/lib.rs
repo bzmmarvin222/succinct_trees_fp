@@ -1,5 +1,9 @@
+extern crate bit_vec;
+extern crate serde;
+#[macro_use]
+extern crate serde_derive;
+
 mod bp;
-use bp::load_and_save;
 
 #[cfg(test)]
 mod tests {
