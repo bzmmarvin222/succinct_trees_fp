@@ -1,0 +1,6 @@
+[package]
+name = "succinct_trees_fb"
+version = "0.1.0"
+authors = ["bzmmarvin222"]
+
+[dependencies]
