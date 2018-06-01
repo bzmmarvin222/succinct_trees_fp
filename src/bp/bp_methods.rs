@@ -124,7 +124,7 @@ fn test_findclose(){
 
 
 //from here x, y are not valid arguments if they do not represent a std_unicode
-//so at index x should start a new node, so there should stay 1.
+//so at index x(and y) should start a new node, so there should stay 1.
 
 
 
@@ -169,9 +169,54 @@ fn test_is_leaf(){
 
 
 
+
 fn test_ansector(){
+    let balanced_parenthesis1 = make_bp_from_0_1_string("1110100100");
+    /*
+                0
+               / \
+              1  7
+             / \
+            2  4
+
+    */
+    assert_eq(true, balanced_parenthesis1.ansector(1,2));
+    assert_eq(true, balanced_parenthesis1.ansector(0,4));
+    assert_eq(false, balanced_parenthesis1.ansector(2,1));
+    assert_eq(false, balanced_parenthesis1.ansector(4,7));
+    // what if balanced_parenthesis1.ansector(7, 25)??
+    // what if balanced_parenthesis1.ansector(3, 5)??
+    // what if balanced_parenthesis1.ansector(1, 5)??
+
+    let balanced_parenthesis2 = make_bp_from_0_1_string("10");
+    assert_eq(false, balanced_parenthesis2.ansector(0,0));
+    // what if balanced_parenthesis2.ansector(0,2)??
+    // what if balanced_parenthesis2.ansector(0,2)??
+
+    let balanced_parenthesis3 = make_bp_from_0_1_string("");
+    // what if balanced_parenthesis3.ansector(0,8)??
+    // what if balanced_parenthesis3.ansector(0,0)??
+
+    let balanced_parenthesis4 = make_bp_from_0_1_string("110101010100");
+    /*
+                0
+            /  / \ \ \
+           1  3  5 7 9
+    */
+    assert_eq(true, balanced_parenthesis4.ansector(0,5));
+    assert_eq(true, balanced_parenthesis4.ansector(0,9));
+    assert_eq(false, balanced_parenthesis4.ansector(9,3));
+    assert_eq(false, balanced_parenthesis4.ansector(3,0));
+    // what if balanced_parenthesis4.ansector(9,42)??
+    // what if balanced_parenthesis4.ansector(9,2)??
+    // what if balanced_parenthesis4.ansector(6,0)??
+    // what if balanced_parenthesis4.ansector(13,1)??
 
 }
+
+
+
+
 
 
 fn test_parent(){
@@ -179,9 +224,17 @@ fn test_parent(){
 }
 
 
+
+
+
+
 fn test_first_child(){
 
 }
+
+
+
+
 
 
 fn test_subtree_size(){
