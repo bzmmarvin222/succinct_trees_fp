@@ -3,6 +3,9 @@ extern crate serde;
 extern crate serde_derive;
 
 mod bp;
+mod binary_heap;
+mod range_min_max_node;
+mod range_min_max_tree;
 
 #[cfg(test)]
 mod tests {
