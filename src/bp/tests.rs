@@ -11,6 +11,10 @@ fn test_serialize_deserialize() {
 
 #[test]
 fn test_from_binary_representation() {
+    let bp = BalancedParentheses::from_binary_represantation(String::from("10"));
+    let expected_vec = bit_vec![true, false];
+    assert_eq!(bp.vec, expected_vec);
+
     let bp = BalancedParentheses::from_binary_represantation(String::from("1110100100"));
     let expected_vec = bit_vec![true, true, true, false, true, false, false, true, false, false];
     assert_eq!(bp.vec, expected_vec);
@@ -18,6 +22,10 @@ fn test_from_binary_representation() {
 
 #[test]
 fn test_from_braces_representation() {
+    let bp = BalancedParentheses::from_braces_represantation(String::from("()"));
+    let expected_vec = bit_vec![true, false];
+    assert_eq!(bp.vec, expected_vec);
+
     let bp = BalancedParentheses::from_braces_represantation(String::from("((()())())"));
     let expected_vec = bit_vec![true, true, true, false, true, false, false, true, false, false];
     assert_eq!(bp.vec, expected_vec);
