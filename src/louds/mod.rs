@@ -1,5 +1,5 @@
-extern crate serde;
-extern crate bincode;
+//extern crate serde;
+//extern crate bincode;
 extern crate bv;
 extern crate bio;
 
@@ -50,11 +50,11 @@ impl LOUDS{
 // represent a node. So, in vec there is 0 at the Position x - 1,y - 1
 
     fn prev_0(x : u64){
-        RankSelect::select_0(RankSelect::rank_0(x))
+        this.rank_select_structure.select_0(this.rank_select_structure.rank_0(x))
     }
 
     fn next0(x : u64){
-        RankSelect::select_0(RankSelect::rank_0(x)+1)
+        this.rank_select_structure.select_0(this.rank_select_structure.rank_0(x)+1)
     }
 
     // whether x is a leaf
