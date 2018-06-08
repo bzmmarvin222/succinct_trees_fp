@@ -1,5 +1,5 @@
 use super::*;
-use super::bv::BitVec;
+use super::bv::*;
 
 #[test]
 fn test_serialize_deserialize() {
@@ -11,29 +11,45 @@ fn test_serialize_deserialize() {
 
 #[test]
 fn test_from_binary_representation() {
-    let bp = BalancedParentheses::from_binary_represantation(String::from("10"));
+    let bp = BalancedParentheses::from_binary_representation(String::from("10"));
     let expected_vec = bit_vec![true, false];
     assert_eq!(bp.vec, expected_vec);
 
-    let bp = BalancedParentheses::from_binary_represantation(String::from("1110100100"));
+    let bp = BalancedParentheses::from_binary_representation(String::from("1110100100"));
     let expected_vec = bit_vec![true, true, true, false, true, false, false, true, false, false];
     assert_eq!(bp.vec, expected_vec);
 }
 
 #[test]
+#[should_panic]
 fn test_from_braces_representation() {
-    let bp = BalancedParentheses::from_braces_represantation(String::from("()"));
+    let bp = BalancedParentheses::from_braces_representation(String::from("()"));
     let expected_vec = bit_vec![true, false];
     assert_eq!(bp.vec, expected_vec);
 
-    let bp = BalancedParentheses::from_braces_represantation(String::from("((()())())"));
+    let bp = BalancedParentheses::from_braces_representation(String::from("((()())())"));
     let expected_vec = bit_vec![true, true, true, false, true, false, false, true, false, false];
     assert_eq!(bp.vec, expected_vec);
+
+    let bp_panic = BalancedParentheses::from_braces_representation(String::from("()abcd"));
+}
+
+#[test]
+fn test_braces_representation() {
+    let vec = bit_vec![true, true, true, false, true, false, false, true, false, false];
+    let bp = BalancedParentheses::new(vec);
+    let rep = bp.braces_representation();
+    assert_eq!(String::from("((()())())"), rep);
+
+    let vec = bit_vec![true, false];
+    let bp = BalancedParentheses::new(vec);
+    let rep = bp.braces_representation();
+    assert_eq!(String::from("()"), rep);
 }
 
 #[test]
 fn test_rank_0(){
-    let balanced_parenthesis1 = BalancedParentheses::from_binary_represantation(String::from("1110100100"));
+    let balanced_parenthesis1 = BalancedParentheses::from_binary_representation(String::from("1110100100"));
     /*
                 0
                / \
@@ -42,32 +58,32 @@ fn test_rank_0(){
             2  4
 
     */
-    assert_eq!(2, balanced_parenthesis1.rank_0(5));
+    assert_eq!(2, balanced_parenthesis1.rank_closing_brace(5));
     // what if balanced_parenthesis1.rank_0(25)??
 
-    let balanced_parenthesis2 = BalancedParentheses::from_binary_represantation(String::from("10"));
-    assert_eq!(0, balanced_parenthesis2.rank_0(0));
+    let balanced_parenthesis2 = BalancedParentheses::from_binary_representation(String::from("10"));
+    assert_eq!(0, balanced_parenthesis2.rank_closing_brace(0));
     // what if balanced_parenthesis2.rank_0(6)??
 
-    let balanced_parenthesis3 = BalancedParentheses::from_binary_represantation(String::from(""));
+    let balanced_parenthesis3 = BalancedParentheses::from_binary_representation(String::from(""));
     // what if balanced_parenthesis3.rank_0(30)??
     // what if balanced_parenthesis3.rank_0(0)??
 
-    let balanced_parenthesis4 = BalancedParentheses::from_binary_represantation(String::from("110101010100"));
+    let balanced_parenthesis4 = BalancedParentheses::from_binary_representation(String::from("110101010100"));
     /*
                 0
             /  / \ \ \
            1  3  5 7 9
     */
-    assert_eq!(2, balanced_parenthesis4.rank_0(4));
-    assert_eq!(2, balanced_parenthesis4.rank_0(5));
+    assert_eq!(2, balanced_parenthesis4.rank_closing_brace(4));
+    assert_eq!(2, balanced_parenthesis4.rank_closing_brace(5));
     // what if balanced_parenthesis4.rank_0(13)??
     // what if balanced_parenthesis4.rank_0(42)??
 }
 
 #[test]
 fn test_rank_1(){
-    let balanced_parenthesis1 = BalancedParentheses::from_binary_represantation(String::from("1110100100"));
+    let balanced_parenthesis1 = BalancedParentheses::from_binary_representation(String::from("1110100100"));
     /*
                 0
                / \
@@ -76,32 +92,32 @@ fn test_rank_1(){
             2  4
 
     */
-    assert_eq!(5, balanced_parenthesis1.rank_1(7));
-    assert_eq!(4, balanced_parenthesis1.rank_1(6));
+    assert_eq!(5, balanced_parenthesis1.rank_opening_brace(7));
+    assert_eq!(4, balanced_parenthesis1.rank_opening_brace(6));
     // what if balanced_parenthesis1.rank_1(25)??
 
-    let balanced_parenthesis2 = BalancedParentheses::from_binary_represantation(String::from("10"));
-    assert_eq!(0, balanced_parenthesis2.rank_1(0));
+    let balanced_parenthesis2 = BalancedParentheses::from_binary_representation(String::from("10"));
+    assert_eq!(0, balanced_parenthesis2.rank_opening_brace(0));
     // what if balanced_parenthesis2.rank_1(2)??
 
-    let balanced_parenthesis3 = BalancedParentheses::from_binary_represantation(String::from(""));
+    let balanced_parenthesis3 = BalancedParentheses::from_binary_representation(String::from(""));
     // what if balanced_parenthesis3.rank_1(30)??
     // what if balanced_parenthesis3.rank_1(0)??
 
-    let balanced_parenthesis4 = BalancedParentheses::from_binary_represantation(String::from("110101010100"));
+    let balanced_parenthesis4 = BalancedParentheses::from_binary_representation(String::from("110101010100"));
     /*
                 0
             /  / \ \ \
            1  3  5 7 9
     */
-    assert_eq!(1, balanced_parenthesis4.rank_1(1));
+    assert_eq!(1, balanced_parenthesis4.rank_opening_brace(1));
     // what if balanced_parenthesis4.rank_1(13)??
     // what if balanced_parenthesis4.rank_1(42)??
 }
 
 #[test]
 fn test_find_close(){
-    let balanced_parenthesis1 = BalancedParentheses::from_binary_represantation(String::from("1110100100"));
+    let balanced_parenthesis1 = BalancedParentheses::from_binary_representation(String::from("1110100100"));
     /*
                 0
                / \
@@ -115,16 +131,16 @@ fn test_find_close(){
     assert_eq!(8, balanced_parenthesis1.find_close(7));
     // what if balanced_parenthesis1.rank0(25)??
 
-    let balanced_parenthesis2 = BalancedParentheses::from_binary_represantation(String::from("10"));
+    let balanced_parenthesis2 = BalancedParentheses::from_binary_representation(String::from("10"));
     assert_eq!(0, balanced_parenthesis2.find_close(0));
     // what if balanced_parenthesis2.find_close(2)??
 
 
-    let balanced_parenthesis3 = BalancedParentheses::from_binary_represantation(String::from(""));
+    let balanced_parenthesis3 = BalancedParentheses::from_binary_representation(String::from(""));
     // what if balanced_parenthesis3.find_close(30)??
     // what if balanced_parenthesis3.find_close(0)??
 
-    let balanced_parenthesis4 = BalancedParentheses::from_binary_represantation(String::from("110101010100"));
+    let balanced_parenthesis4 = BalancedParentheses::from_binary_representation(String::from("110101010100"));
     /*
                 0
             /  / \ \ \
@@ -139,7 +155,7 @@ fn test_find_close(){
 
 #[test]
 fn test_index_represents_node(){
-    let balanced_parenthesis1 = BalancedParentheses::from_binary_represantation(String::from("1110100100"));
+    let balanced_parenthesis1 = BalancedParentheses::from_binary_representation(String::from("1110100100"));
     /*
                 0
                / \
@@ -157,16 +173,16 @@ fn test_index_represents_node(){
     // what if balanced_parenthesis1.represents_node(-3)??
     //will negative number interpreted as positive?
 
-    let balanced_parenthesis2 = BalancedParentheses::from_binary_represantation(String::from("10"));
+    let balanced_parenthesis2 = BalancedParentheses::from_binary_representation(String::from("10"));
     assert_eq!(true, balanced_parenthesis2.represents_node(0));
     assert_eq!(false, balanced_parenthesis2.represents_node(1));
     // what if balanced_parenthesis2.represents_node(2)??
 
-    let balanced_parenthesis3 = BalancedParentheses::from_binary_represantation(String::from(""));
+    let balanced_parenthesis3 = BalancedParentheses::from_binary_representation(String::from(""));
     // what if balanced_parenthesis3.represents_node(30)??
     // what if balanced_parenthesis3.represents_node(0)??
 
-    let balanced_parenthesis4 = BalancedParentheses::from_binary_represantation(String::from("110101010100"));
+    let balanced_parenthesis4 = BalancedParentheses::from_binary_representation(String::from("110101010100"));
     /*
                 0
             /  / \ \ \
@@ -181,7 +197,7 @@ fn test_index_represents_node(){
 
 #[test]
 fn test_is_leaf(){
-    let balanced_parenthesis1 = BalancedParentheses::from_binary_represantation(String::from("1110100100"));
+    let balanced_parenthesis1 = BalancedParentheses::from_binary_representation(String::from("1110100100"));
     /*
                 0
                / \
@@ -195,16 +211,16 @@ fn test_is_leaf(){
     // what if balanced_parenthesis1.is_leaf(25)??
     // what if balanced_parenthesis1.is_leaf(5)??
 
-    let balanced_parenthesis2 = BalancedParentheses::from_binary_represantation(String::from("10"));
-    assert_eq!(0, balanced_parenthesis2.is_leaf(0));
+    let balanced_parenthesis2 = BalancedParentheses::from_binary_representation(String::from("10"));
+    assert_eq!(false, balanced_parenthesis2.is_leaf(0));
     // what if balanced_parenthesis2.is_leaf(2)??
     // what if balanced_parenthesis2.is_leaf(1)??
 
-    let balanced_parenthesis3 = BalancedParentheses::from_binary_represantation(String::from(""));
+    let balanced_parenthesis3 = BalancedParentheses::from_binary_representation(String::from(""));
     // what if balanced_parenthesis3.is_leaf(30)??
     // what if balanced_parenthesis3.is_leaf(0)??
 
-    let balanced_parenthesis4 = BalancedParentheses::from_binary_represantation(String::from("110101010100"));
+    let balanced_parenthesis4 = BalancedParentheses::from_binary_representation(String::from("110101010100"));
     /*
                 0
             /  / \ \ \
@@ -219,7 +235,7 @@ fn test_is_leaf(){
 
 #[test]
 fn test_ancestor(){
-    let balanced_parenthesis1 = BalancedParentheses::from_binary_represantation(String::from("1110100100"));
+    let balanced_parenthesis1 = BalancedParentheses::from_binary_representation(String::from("1110100100"));
     /*
                 0
                / \
@@ -236,16 +252,16 @@ fn test_ancestor(){
     // what if balanced_parenthesis1.ancestor(3, 5)??
     // what if balanced_parenthesis1.ancestor(1, 5)??
 
-    let balanced_parenthesis2 = BalancedParentheses::from_binary_represantation(String::from("10"));
+    let balanced_parenthesis2 = BalancedParentheses::from_binary_representation(String::from("10"));
     assert_eq!(false, balanced_parenthesis2.ancestor(0,0));
     // what if balanced_parenthesis2.ancestor(0,2)??
     // what if balanced_parenthesis2.ancestor(9,2)??
 
-    let balanced_parenthesis3 = BalancedParentheses::from_binary_represantation(String::from(""));
+    let balanced_parenthesis3 = BalancedParentheses::from_binary_representation(String::from(""));
     // what if balanced_parenthesis3.ancestor(0,8)??
     // what if balanced_parenthesis3.ancestor(0,0)??
 
-    let balanced_parenthesis4 = BalancedParentheses::from_binary_represantation(String::from("110101010100"));
+    let balanced_parenthesis4 = BalancedParentheses::from_binary_representation(String::from("110101010100"));
     /*
                 0
             /  / \ \ \
@@ -263,7 +279,7 @@ fn test_ancestor(){
 
 #[test]
 fn test_parent(){
-    let balanced_parenthesis1 = BalancedParentheses::from_binary_represantation(String::from("1110100100"));
+    let balanced_parenthesis1 = BalancedParentheses::from_binary_representation(String::from("1110100100"));
     /*
                 0
                / \
@@ -280,15 +296,15 @@ fn test_parent(){
     // what if balanced_parenthesis1.parent(5)??
 
 
-    let balanced_parenthesis2 = BalancedParentheses::from_binary_represantation(String::from("10"));
+    let balanced_parenthesis2 = BalancedParentheses::from_binary_representation(String::from("10"));
     // what if balanced_parenthesis2.parent(0)??
     // what if balanced_parenthesis2.parent(2)??
 
-    let balanced_parenthesis3 = BalancedParentheses::from_binary_represantation(String::from(""));
+    let balanced_parenthesis3 = BalancedParentheses::from_binary_representation(String::from(""));
     // what if balanced_parenthesis3.parent(8)??
     // what if balanced_parenthesis3..parent(0)??
 
-    let balanced_parenthesis4 = BalancedParentheses::from_binary_represantation(String::from("110101010100"));
+    let balanced_parenthesis4 = BalancedParentheses::from_binary_representation(String::from("110101010100"));
     /*
                 0
             /  / \ \ \
@@ -302,7 +318,7 @@ fn test_parent(){
 }
 
 fn test_first_child(){
-    let balanced_parenthesis1 = BalancedParentheses::from_binary_represantation(String::from("1110100100"));
+    let balanced_parenthesis1 = BalancedParentheses::from_binary_representation(String::from("1110100100"));
     /*
                 0
                / \
@@ -317,16 +333,16 @@ fn test_first_child(){
     // what if balanced_parenthesis1.first_child(25)??
     // what if balanced_parenthesis1.first_child(5)??
 
-    let balanced_parenthesis2 = BalancedParentheses::from_binary_represantation(String::from("10"));
+    let balanced_parenthesis2 = BalancedParentheses::from_binary_representation(String::from("10"));
     // what if balanced_parenthesis2.first_child(2)??
     // what if balanced_parenthesis2.first_child(0)??
     // what if balanced_parenthesis2.first_child(1)??
 
-    let balanced_parenthesis3 = BalancedParentheses::from_binary_represantation(String::from(""));
+    let balanced_parenthesis3 = BalancedParentheses::from_binary_representation(String::from(""));
     // what if balanced_parenthesis3.first_child(8)??
     // what if balanced_parenthesis3.first_child(0)??
 
-    let balanced_parenthesis4 = BalancedParentheses::from_binary_represantation(String::from("110101010100"));
+    let balanced_parenthesis4 = BalancedParentheses::from_binary_representation(String::from("110101010100"));
     /*
                 0
             /  / \ \ \
@@ -341,7 +357,7 @@ fn test_first_child(){
 
 #[test]
 fn test_subtree_size(){
-    let balanced_parenthesis1 = BalancedParentheses::from_binary_represantation(String::from("1110100100"));
+    let balanced_parenthesis1 = BalancedParentheses::from_binary_representation(String::from("1110100100"));
     /*
                 0
                / \
@@ -355,17 +371,17 @@ fn test_subtree_size(){
     // what if balanced_parenthesis1.subtree_size(25)??
     // what if balanced_parenthesis1.subtree_size(5)??
 
-    let balanced_parenthesis2 = BalancedParentheses::from_binary_represantation(String::from("10"));
-    assert_eq!(false, balanced_parenthesis2.ansector(0,0));
+    let balanced_parenthesis2 = BalancedParentheses::from_binary_representation(String::from("10"));
+    assert_eq!(false, balanced_parenthesis2.ancestor(0,0));
     // what if balanced_parenthesis2.subtree_size(0)??
     // what if balanced_parenthesis2.subtree_size(2)??
     // what if balanced_parenthesis2.subtree_size(1)??
 
-    let balanced_parenthesis3 = BalancedParentheses::from_binary_represantation(String::from(""));
+    let balanced_parenthesis3 = BalancedParentheses::from_binary_representation(String::from(""));
     // what if balanced_parenthesis3.subtree_size(0)??
     // what if balanced_parenthesis3.subtree_size(8)??
 
-    let balanced_parenthesis4 = BalancedParentheses::from_binary_represantation(String::from("110101010100"));
+    let balanced_parenthesis4 = BalancedParentheses::from_binary_representation(String::from("110101010100"));
     /*
                 0
             /  / \ \ \

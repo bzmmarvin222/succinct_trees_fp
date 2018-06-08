@@ -2,7 +2,7 @@ extern crate serde;
 extern crate bincode;
 extern crate bv;
 
-use self::bv::BitVec;
+use self::bv::*;
 use self::bincode::{serialize, deserialize};
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
@@ -17,14 +17,23 @@ impl BalancedParentheses {
         }
     }
 
-    fn from_binary_represantation(bin: String) -> BalancedParentheses {
+    fn from_binary_representation(bin: String) -> BalancedParentheses {
         //TODO: real impl
         BalancedParentheses::new(BitVec::new_fill(true, 8))
     }
 
-    fn from_braces_represantation(braces: String) -> BalancedParentheses {
-        //TODO: real impl
-        BalancedParentheses::new(BitVec::new_fill(true, 8))
+    fn from_braces_representation(braces: String) -> BalancedParentheses {
+        let mut vect = BitVec::new();
+        for brace in braces.chars() {
+            if brace == '(' {
+                vect.push(true);
+            } else if brace == ')' {
+                vect.push(false);
+            } else {
+                panic!("only ( and ) allowed");
+            }
+        }
+        BalancedParentheses::new(vect)
     }
 
     fn binary_representation() -> String {
@@ -32,17 +41,26 @@ impl BalancedParentheses {
         String::from("01010101")
     }
 
-    fn braces_represantation() -> String {
-        //TODO: real impl
-        String::from("((()())())")
+    fn braces_representation(&self) -> String {
+        let vec = &self.vec;
+        let mut result = String::new();
+
+        for i in 0..vec.len() {
+            if vec.as_slice()[i] {
+                result.push('(');
+            } else {
+                result.push(')');
+            }
+        }
+        result
     }
 
-    fn rank_0(&self, index: u64) -> u64 {
+    fn rank_closing_brace(&self, index: u64) -> u64 {
         //TODO: real impl
         3
     }
 
-    fn rank_1(&self, index: u64) -> u64 {
+    fn rank_opening_brace(&self, index: u64) -> u64 {
         //TODO: real impl
         4
     }
