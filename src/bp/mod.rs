@@ -6,6 +6,8 @@ use self::bv::*;
 use self::bincode::{serialize, deserialize};
 use SuccinctTree;
 
+mod range_min_max_tree;
+
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct BalancedParentheses {
     vec: BitVec<u8>

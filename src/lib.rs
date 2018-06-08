@@ -7,6 +7,7 @@ extern crate bincode;
 use bv::BitVec;
 
 mod bp;
+
 mod louds;
 
 use bp::BalancedParentheses;
