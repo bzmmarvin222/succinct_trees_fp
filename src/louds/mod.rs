@@ -14,9 +14,11 @@ pub struct LOUDS{
 
 impl LOUDS{
     fn new(vector: BitVec) -> LOUDS {
+    //    k = (log(vector.bit_len()) hoch 2)/32;
+        k=1;
         LOUDS {
             vec: vector,
-            rank_select_structure: RankSelect::new(vec,1);
+            rank_select_structure: RankSelect::new(vec,k)
         }
     }
 
@@ -43,13 +45,50 @@ impl LOUDS{
 
 //never pass negative numbers as parameters in this class
 
-    fn prev0(i : u64){
+
+// from here x,y are the elements of the sequence, which
+// represent a node. So, in vec there is 0 at the Position x - 1,y - 1
+
+    fn prev_0(x : u64){
+        RankSelect::select_0(RankSelect::rank_0(x))
+    }
+
+    fn next0(x : u64){
+        RankSelect::select_0(RankSelect::rank_0(x)+1)
+    }
+
+    // whether x is a leaf
+    fn is_leaf(x : u64){
 
     }
 
-    fn next0(i : u64){
+    // number of siblings to the left of node x
+    fn child_rank(x : u64){
 
     }
+
+    // next sibling (to the right) of node x
+    fn next_sibling(x : u64){
+
+    }
+
+    // number of children of node x
+    fn degree(x : u64){
+
+    }
+
+    // parent of node x
+    fn parent(x : u64){
+
+    }
+
+    // i-th child of node x
+    fn child(x : u64, i : u64){
+
+    }
+
+
+
 
 
 }
