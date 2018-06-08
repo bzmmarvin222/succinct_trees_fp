@@ -5,6 +5,8 @@ extern crate bv;
 use self::bv::BitVec;
 use self::bincode::{serialize, deserialize};
 
+mod range_min_max_tree;
+
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct BalancedParentheses {
     vec: BitVec
