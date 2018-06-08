@@ -48,7 +48,7 @@ fn test_braces_representation() {
 }
 
 #[test]
-fn test_rank_0(){
+fn test_rank_closing_brace(){
     let balanced_parenthesis1 = BalancedParentheses::from_binary_representation(String::from("1110100100"));
     /*
                 0
@@ -82,7 +82,7 @@ fn test_rank_0(){
 }
 
 #[test]
-fn test_rank_1(){
+fn test_rank_opening_brace(){
     let balanced_parenthesis1 = BalancedParentheses::from_binary_representation(String::from("1110100100"));
     /*
                 0
