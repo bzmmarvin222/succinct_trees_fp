@@ -55,47 +55,47 @@ impl BalancedParentheses {
         result
     }
 
-    fn rank_closing_brace(&self, index: u64) -> u64 {
+    fn rank_closing_brace(&self, index: usize) -> usize {
         //TODO: real impl
         3
     }
 
-    fn rank_opening_brace(&self, index: u64) -> u64 {
+    fn rank_opening_brace(&self, index: usize) -> usize {
         //TODO: real impl
         4
     }
 
-    fn find_close(&self, index: u64) -> u64 {
+    fn find_close(&self, index: usize) -> usize {
         //TODO: real impl
         5
     }
 
-    fn is_leaf(&self, index: u64) -> bool {
+    fn is_leaf(&self, index: usize) -> bool {
         //TODO: real impl
         true
     }
 
-    fn represents_node(&self, index: u64) -> bool {
+    fn represents_node(&self, index: usize) -> bool {
         //TODO: real impl
         true
     }
 
-    fn ancestor(&self, index_to_test: u64, index_ancestor: u64) -> bool {
+    fn ancestor(&self, index_to_test: usize, index_ancestor: usize) -> bool {
         //TODO: real impl
         true
     }
 
-    fn parent(&self, index: u64) -> u64 {
+    fn parent(&self, index: usize) -> usize {
         //TODO: real impl
         5
     }
 
-    fn first_child(&self, index: u64) -> u64 {
+    fn first_child(&self, index: usize) -> usize {
         //TODO: real impl
         5
     }
 
-    fn subtree_size(&self, index: u64) -> u64 {
+    fn subtree_size(&self, index: usize) -> usize {
         //TODO: real impl
         5
     }
