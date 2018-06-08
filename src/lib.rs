@@ -3,6 +3,7 @@ extern crate serde;
 extern crate serde_derive;
 
 mod bp;
+mod louds;
 
 #[cfg(test)]
 mod tests {
