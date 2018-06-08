@@ -17,11 +17,6 @@ impl BalancedParentheses {
         }
     }
 
-    fn from_binary_representation(bin: String) -> BalancedParentheses {
-        //TODO: real impl
-        BalancedParentheses::new(BitVec::new_fill(true, 8))
-    }
-
     fn from_braces_representation(braces: String) -> BalancedParentheses {
         let mut vect = BitVec::new();
         for brace in braces.chars() {
@@ -34,11 +29,6 @@ impl BalancedParentheses {
             }
         }
         BalancedParentheses::new(vect)
-    }
-
-    fn binary_representation() -> String {
-        //TODO: real impl
-        String::from("01010101")
     }
 
     fn braces_representation(&self) -> String {
