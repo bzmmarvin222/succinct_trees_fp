@@ -4,6 +4,7 @@ extern crate bv;
 
 use self::bv::*;
 use self::bincode::{serialize, deserialize};
+use SuccinctTree;
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct BalancedParentheses {
@@ -11,40 +12,6 @@ pub struct BalancedParentheses {
 }
 
 impl BalancedParentheses {
-    fn new(vector: BitVec) -> BalancedParentheses {
-        BalancedParentheses {
-            vec: vector
-        }
-    }
-
-    fn from_braces_representation(braces: String) -> BalancedParentheses {
-        let mut vect = BitVec::new();
-        for brace in braces.chars() {
-            if brace == '(' {
-                vect.push(true);
-            } else if brace == ')' {
-                vect.push(false);
-            } else {
-                panic!("only ( and ) allowed");
-            }
-        }
-        BalancedParentheses::new(vect)
-    }
-
-    fn braces_representation(&self) -> String {
-        let vec = &self.vec;
-        let mut result = String::new();
-
-        for i in 0..vec.len() {
-            if vec.as_slice()[i] {
-                result.push('(');
-            } else {
-                result.push(')');
-            }
-        }
-        result
-    }
-
     fn rank_closing_brace(&self, index: usize) -> usize {
         //TODO: real impl
         3
@@ -88,6 +55,18 @@ impl BalancedParentheses {
     fn subtree_size(&self, index: usize) -> usize {
         //TODO: real impl
         5
+    }
+}
+
+impl SuccinctTree for BalancedParentheses {
+    fn new(vector: BitVec) -> BalancedParentheses {
+        BalancedParentheses {
+            vec: vector
+        }
+    }
+
+    fn vec(&self) -> BitVec<usize> {
+        (&self.vec).to_owned()
     }
 
     fn serialize(&self) -> Vec<u8> {
