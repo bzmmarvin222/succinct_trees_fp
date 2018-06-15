@@ -50,15 +50,62 @@ impl LOUDS{
 //never pass negative numbers as parameters in this class
 
 
-// from here x,y are the elements of the sequence, which
-// represent a node. So, in vec there is 0 at the Position x - 1,y - 1
+    // from here x,y are the elements of the sequence, which
+    // represent a node. So, in vec there is 0 at the Position x - 1,y - 1
+    fn index_represents_node(&self, x : u64) -> bool {
+        let result = (self.vec[x-1] == false);
+        result
+    }
 
-    fn prev_0(&self, x : u64) -> u64 {
-        match self.rank_select_structure.rank_0(x) {
+    fn prev_0(&self, x : u64) -> Option<u64> {
+        if (self.index_represents_node(x))
+        {
+            match self.rank_select_structure.rank_0(x) {
+                Some(i) => {
+                    self.rank_select_structure.select_0(i)
+                },
+                None => {None}
+            }
+        }
+        else{
+            None
+        }
+    }
+
+
+    fn next_0(&self, x : u64) -> Option<u64> {
+        if (self.index_represents_node(x))
+        {
+            match self.rank_select_structure.rank_0(x) {
+                Some(i) => {
+                    self.rank_select_structure.select_0(i+1)
+                },
+                None => {None}
+            }
+        }
+        else{
+            None
+        }
+    }
+
+    // whether x is a leaf
+    fn is_leaf(&self, x : u64) -> bool {
+        let result = (self.vec[x] == false);
+        result
+    }
+
+    // number of siblings to the left of node x
+    fn child_rank(&self, x : u64) -> u64 {
+        match self.rank_select_structure.rank_0(x-1) {
             Some(i) => {
-                match self.rank_select_structure.select_0(i) {
-                    Some(result) => {result},
-                    None =>{0}
+                match self.rank_select_structure.select_1(i) {
+                    Some(y) => {
+                        match self.prev_0(y) {
+                            Some(result) => {result},
+                            None =>{0}
+                        }
+                    },
+                    None => {0}
                 }
             },
             None => {0}
@@ -67,38 +114,36 @@ impl LOUDS{
         }
     }
 
-    fn next0(x : u64){
-        //this.rank_select_structure.select_0(this.rank_select_structure.rank_0(x)+1)
-    }
-
-    // whether x is a leaf
-    fn is_leaf(x : u64){
-
-    }
-
-    // number of siblings to the left of node x
-    fn child_rank(x : u64){
-
-    }
-
     // next sibling (to the right) of node x
-    fn next_sibling(x : u64){
-
+    fn next_sibling(&self, x : u64) -> u64 {
+        match self.rank_select_structure.rank_0(x-1) {
+            Some(i) => {
+                match self.rank_select_structure.select_1(i) {
+                    Some(y) => {
+                        let result = y - self.prev_0(y);
+                        result
+                    },
+                    None => {0}
+                }
+            },
+            None => {0}
+            //is there are no previous 0, then will 0 returned
+            //at index 0 cannot stand 0, this value is a mark for non-exstence
+        }
     }
 
     // number of children of node x
-    fn degree(x : u64){
+    fn degree(&self, x : u64) -> u64 {
 
     }
 
     // parent of node x
-    fn parent(x : u64){
+    fn parent(&self, x : u64) -> u64 {
 
     }
 
     // i-th child of node x
-    fn child(x : u64, i : u64){
-
+    fn child(&self, x : u64) -> u64 {
     }
 
 
