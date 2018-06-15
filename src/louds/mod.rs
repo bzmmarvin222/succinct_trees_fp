@@ -21,7 +21,7 @@ impl LOUDS{
         // usize is u8 of a 64 bit mashine and u4 of a 32 bit mashine
         // u8 vertor shall be a bv BitVec<Block = u8>
         LOUDS {
-            vec: vector,
+            vec: (&vector).to_owned(),
             rank_select_structure: RankSelect::new(vector,k)
         }
     }
@@ -134,16 +134,20 @@ impl LOUDS{
 
     // number of children of node x
     fn degree(&self, x : u64) -> u64 {
-
+        //TODO: implement
+        5
     }
 
     // parent of node x
     fn parent(&self, x : u64) -> u64 {
-
+        //TODO: implement
+        5
     }
 
     // i-th child of node x
     fn child(&self, x : u64) -> u64 {
+        //TODO: implement
+        5
     }
 
 
