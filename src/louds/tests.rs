@@ -1,7 +1,7 @@
 use super::*;
 
 #[test]
-test_prev0(){
+fn test_prev_0(){
     // prev0 works not correct if param is 0 
 //    111101010000
 //    prev0(4)=select0(rank0(4))
