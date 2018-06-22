@@ -222,50 +222,6 @@ fn test_is_leaf(){
 }
 
 #[test]
-fn test_ancestor(){
-    let balanced_parenthesis1 = BalancedParentheses::from_braces_representation(String::from("((()())())"));
-    /*
-                0
-               / \
-              1  7
-             / \
-            2  4
-
-    */
-    assert_eq!(true, balanced_parenthesis1.ancestor(1,2));
-    assert_eq!(true, balanced_parenthesis1.ancestor(0,4));
-    assert_eq!(false, balanced_parenthesis1.ancestor(2,1));
-    assert_eq!(false, balanced_parenthesis1.ancestor(4,7));
-    // what if balanced_parenthesis1.ancestor(7, 25)??
-    // what if balanced_parenthesis1.ancestor(3, 5)??
-    // what if balanced_parenthesis1.ancestor(1, 5)??
-
-    let balanced_parenthesis2 = BalancedParentheses::from_braces_representation(String::from("()"));
-    assert_eq!(false, balanced_parenthesis2.ancestor(0,0));
-    // what if balanced_parenthesis2.ancestor(0,2)??
-    // what if balanced_parenthesis2.ancestor(9,2)??
-
-    let balanced_parenthesis3 = BalancedParentheses::from_braces_representation(String::from(""));
-    // what if balanced_parenthesis3.ancestor(0,8)??
-    // what if balanced_parenthesis3.ancestor(0,0)??
-
-    let balanced_parenthesis4 = BalancedParentheses::from_braces_representation(String::from("(()()()()())"));
-    /*
-                0
-            /  / \ \ \
-           1  3  5 7 9
-    */
-    assert_eq!(true, balanced_parenthesis4.ancestor(0,5));
-    assert_eq!(true, balanced_parenthesis4.ancestor(0,9));
-    assert_eq!(false, balanced_parenthesis4.ancestor(9,3));
-    assert_eq!(false, balanced_parenthesis4.ancestor(3,0));
-    // what if balanced_parenthesis4.ancestor(9,42)??
-    // what if balanced_parenthesis4.ancestor(9,2)??
-    // what if balanced_parenthesis4.ancestor(6,0)??
-    // what if balanced_parenthesis4.ancestor(13,1)??
-}
-
-#[test]
 fn test_parent(){
     let balanced_parenthesis1 = BalancedParentheses::from_braces_representation(String::from("((()())())"));
     /*
@@ -342,6 +298,56 @@ fn test_first_child(){
     // what if balanced_parenthesis4.first_child(13)??
     // what if balanced_parenthesis4.first_child(8)??
 }
+
+//#[test] fn next_sibling(){}
+// no test because next_sibling(x) = findclose(x)+1
+
+#[test]
+fn test_ancestor(){
+    let balanced_parenthesis1 = BalancedParentheses::from_braces_representation(String::from("((()())())"));
+    /*
+                0
+               / \
+              1  7
+             / \
+            2  4
+
+    */
+    assert_eq!(true, balanced_parenthesis1.ancestor(1,2));
+    assert_eq!(true, balanced_parenthesis1.ancestor(0,4));
+    assert_eq!(false, balanced_parenthesis1.ancestor(2,1));
+    assert_eq!(false, balanced_parenthesis1.ancestor(4,7));
+    // what if balanced_parenthesis1.ancestor(7, 25)??
+    // what if balanced_parenthesis1.ancestor(3, 5)??
+    // what if balanced_parenthesis1.ancestor(1, 5)??
+
+    let balanced_parenthesis2 = BalancedParentheses::from_braces_representation(String::from("()"));
+    assert_eq!(false, balanced_parenthesis2.ancestor(0,0));
+    // what if balanced_parenthesis2.ancestor(0,2)??
+    // what if balanced_parenthesis2.ancestor(9,2)??
+
+    let balanced_parenthesis3 = BalancedParentheses::from_braces_representation(String::from(""));
+    // what if balanced_parenthesis3.ancestor(0,8)??
+    // what if balanced_parenthesis3.ancestor(0,0)??
+
+    let balanced_parenthesis4 = BalancedParentheses::from_braces_representation(String::from("(()()()()())"));
+    /*
+                0
+            /  / \ \ \
+           1  3  5 7 9
+    */
+    assert_eq!(true, balanced_parenthesis4.ancestor(0,5));
+    assert_eq!(true, balanced_parenthesis4.ancestor(0,9));
+    assert_eq!(false, balanced_parenthesis4.ancestor(9,3));
+    assert_eq!(false, balanced_parenthesis4.ancestor(3,0));
+    // what if balanced_parenthesis4.ancestor(9,42)??
+    // what if balanced_parenthesis4.ancestor(9,2)??
+    // what if balanced_parenthesis4.ancestor(6,0)??
+    // what if balanced_parenthesis4.ancestor(13,1)??
+}
+
+//#[test] fn dephth(){}
+// no test because depth(x) = excess(x)
 
 #[test]
 fn test_subtree_size(){

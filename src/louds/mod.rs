@@ -35,17 +35,10 @@ impl LOUDS {
         String::from("((()())())")
     }
 
-
 //never pass negative numbers as parameters in this class
-
 
     // from here x,y are the elements of the sequence, which
     // represent a node. So, in vec there is 0 at the Position x - 1,y - 1
-    fn index_represents_node(&self, x : u64) -> bool {
-        let result = (self.vec[x-1] == false);
-        result
-    }
-
 
     fn prev_0(&self, x : u64) -> Option<u64> {
         if (self.index_represents_node(x))
