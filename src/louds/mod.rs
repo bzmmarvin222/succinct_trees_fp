@@ -126,74 +126,91 @@ impl LOUDS{
 
     // next sibling (to the right) of node x
     fn next_sibling(&self, x : u64) -> Option<u64> {
-        match self.rank_select_structure.rank_0(x-1) {
-            Some(i) => {
-                match self.rank_select_structure.select_1(i) {
-                    Some(y) => {
-                        let result = y - self.prev_0(y);
-                        result
-                    },
-                    None => {0}
-                }
-            },
-            None => {0}
-            //is there are no previous 0, then will 0 returned
-            //at index 0 cannot stand 0, this value is a mark for non-exstence
+        if self.index_represents_node(x)
+        {
+            match self.rank_select_structure.rank_0(x-1) {
+                Some(y) => {
+                    match self.rank_select_structure.select_1(y+1) {
+                        Some(z) => {
+                            self.rank_select_structure.select_0(z+1)
+                        },
+                        None => {None}
+                    }
+                },
+                None => {None}
+            }
         }
+        else {None}
     }
 
+
     // number of children of node x
-<<<<<<< HEAD
     fn degree(&self, x : u64) -> Option<u64> {
         if (self.index_represents_node(x))
         {
-            let result
-            Some(result)
+            match self.next_0(x) {
+                Some(y) => {
+                    let result = y-x;
+                    Some(result)
+                },
+                None => {None}
+            }
         }
         else
         {None}
     }
+
 
     // parent of node x
     fn parent(&self, x : u64) -> Option<u64> {
-        if (self.index_represents_node(x))
+        if self.index_represents_node(x)
         {
-            let result
-            Some(result)
+            match self.rank_select_structure.rank_0(x-1) {
+                Some(i) => {
+                    match self.rank_select_structure.select_1(i) {
+                        Some(y) => {
+                            match self.prev_0(y) {
+                                Some(prev_zero_y) => {
+                                    let result = y - prev_zero_y;
+                                    Some(result)
+                                },
+                                None => {None}
+                            }
+                        },
+                        None => {None}
+                    }
+                },
+                None => {None}
+            }
         }
-        else
-        {None}
+        else {None}
     }
+
 
     // i-th child of node x
     fn child(&self, x : u64) -> Option<u64> {
-        if (self.index_represents_node(x))
+        if self.index_represents_node(x)
         {
-            let result
-            Some(result)
+            match self.rank_select_structure.rank_0(x-1) {
+                Some(i) => {
+                    match self.rank_select_structure.select_1(i) {
+                        Some(y) => {
+                            match self.prev_0(y) {
+                                Some(prev_zero_y) => {
+                                    let result = y - prev_zero_y;
+                                    Some(result)
+                                },
+                                None => {None}
+                            }
+                        },
+                        None => {None}
+                    }
+                },
+                None => {None}
+            }
         }
-        else
-        {None}
-=======
-    fn degree(&self, x : u64) -> u64 {
-        //TODO: implement
-        5
+        else {None}
     }
-
-    // parent of node x
-    fn parent(&self, x : u64) -> u64 {
-        //TODO: implement
-        5
-    }
-
-    // i-th child of node x
-    fn child(&self, x : u64) -> u64 {
-        //TODO: implement
-        5
->>>>>>> ad58eaec08375b0d11fad1e760d0761c6b7e9cb8
-    }
-
-
 
 
 
