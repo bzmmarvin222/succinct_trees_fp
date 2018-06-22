@@ -2,7 +2,6 @@ extern crate bv;
 use self::bv::BitVec;
 use std::cmp;
 
-#[derive(Default)]
 pub struct rmm_Node {
     pub excess:  i64,
     pub min_excess: i64,
@@ -23,6 +22,7 @@ impl rmm_Node {
 }
 
 
+#[derive(Default)]
 pub struct RangeMinMaxTree {
     blocksize: usize,
     tree: Vec<rmm_Node>,
@@ -46,13 +46,26 @@ impl RangeMinMaxTree {
              0 => bitvector.len()/blocksize,
              _ => bitvector.len()/blocksize+1,
          };
+         println!("vectorn length: {:?}", bitvector.len());
+         println!("quantity_children: {:?}", quantity_children);
 
          let nodeCount =  match quantity_children.checked_next_power_of_two() {
              Some(n) => 2*n -1,
              None => panic!("Overflow Error"),
          };
 
+         println!("node count{:?}", nodeCount as usize);
+
          let mut heap: Vec<rmm_Node> = Vec::with_capacity(nodeCount as usize);
+
+println!("heapcapacity {:?}", heap.capacity());
+
+         for i in 0 .. heap.capacity(){
+             heap.push(rmm_Node::new());
+         }
+
+
+         println!("heaplength {:?}", heap.len());
 
          let mut e: i64 = 0;
          let mut m: i64 = 0;
@@ -82,6 +95,7 @@ impl RangeMinMaxTree {
          }
 
          for x in (heap.len()/2)-1 .. 0 {
+             println!("{:?}", x);
              let left = 2*x+1;
              let right = 2*x+2;
              e = heap[left].excess + heap[right].excess;
@@ -206,3 +220,6 @@ impl RangeMinMaxTree {
         unimplemented!();
     }
 }
+
+#[cfg(test)]
+mod tests;
