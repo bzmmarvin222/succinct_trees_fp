@@ -62,8 +62,8 @@ impl LOUDS{
         if (self.index_represents_node(x))
         {
             match self.rank_select_structure.rank_0(x) {
-                Some(i) => {
-                    self.rank_select_structure.select_0(i)
+                Some(rank0_x) => {
+                    self.rank_select_structure.select_0(rank0_x)
                 },
                 None => {None}
             }
@@ -76,8 +76,8 @@ impl LOUDS{
         if (self.index_represents_node(x))
         {
             match self.rank_select_structure.rank_0(x) {
-                Some(i) => {
-                    self.rank_select_structure.select_0(i+1)
+                Some(rank0_x) => {
+                    self.rank_select_structure.select_0(rank0_x + 1)
                 },
                 None => {None}
             }
@@ -102,13 +102,13 @@ impl LOUDS{
     fn child_rank(&self, x : u64) -> Option<u64> {
         if self.index_represents_node(x)
         {
-            match self.rank_select_structure.rank_0(x-1) {
-                Some(i) => {
-                    match self.rank_select_structure.select_1(i) {
-                        Some(y) => {
-                            match self.prev_0(y) {
-                                Some(prev_zero_y) => {
-                                    let result = y - prev_zero_y;
+            match self.rank_select_structure.rank_0(x - 1) {
+                Some(rank0_x_1) => {
+                    match self.rank_select_structure.select_1(rank0_x_1) {
+                        Some(select1_rank0_x_1) => {
+                            match self.prev_0(select1_rank0_x_1) {
+                                Some(prev_zero_select1_rank0_x_1) => {
+                                    let result = select1_rank0_x_1 - prev_zero_select1_rank0_x_1;
                                     Some(result)
                                 },
                                 None => {None}
@@ -128,11 +128,11 @@ impl LOUDS{
     fn next_sibling(&self, x : u64) -> Option<u64> {
         if self.index_represents_node(x)
         {
-            match self.rank_select_structure.rank_0(x-1) {
-                Some(y) => {
-                    match self.rank_select_structure.select_1(y+1) {
-                        Some(z) => {
-                            self.rank_select_structure.select_0(z+1)
+            match self.rank_select_structure.rank_0(x - 1) {
+                Some(rank0_x_1) => {
+                    match self.rank_select_structure.select_1(rank0_x_1 + 1) {
+                        Some(select1_rank0_x_1) => {
+                            self.rank_select_structure.select_0(select1_rank0_x_1 + 1)
                         },
                         None => {None}
                     }
@@ -146,11 +146,11 @@ impl LOUDS{
 
     // number of children of node x
     fn degree(&self, x : u64) -> Option<u64> {
-        if (self.index_represents_node(x))
+        if self.index_represents_node(x)
         {
             match self.next_0(x) {
-                Some(y) => {
-                    let result = y-x;
+                Some(next0_x) => {
+                    let result = next0_x - x;
                     Some(result)
                 },
                 None => {None}
@@ -165,13 +165,13 @@ impl LOUDS{
     fn parent(&self, x : u64) -> Option<u64> {
         if self.index_represents_node(x)
         {
-            match self.rank_select_structure.rank_0(x-1) {
-                Some(i) => {
-                    match self.rank_select_structure.select_1(i) {
-                        Some(y) => {
-                            match self.prev_0(y) {
-                                Some(prev_zero_y) => {
-                                    let result = y - prev_zero_y;
+            match self.rank_select_structure.rank_0(x) {
+                Some(rank0_x) => {
+                    match self.rank_select_structure.select_1(rank0_x) {
+                        Some(select1_rank0_x) => {
+                            match self.prev_0(select1_rank0_x) {
+                                Some(prev_zero_select1_rank0_x) => {
+                                    let result = prev_zero_select1_rank0_x + 1;
                                     Some(result)
                                 },
                                 None => {None}
@@ -188,20 +188,15 @@ impl LOUDS{
 
 
     // i-th child of node x
-    fn child(&self, x : u64) -> Option<u64> {
+    fn child(&self, x : u64, i : u64) -> Option<u64> {
         if self.index_represents_node(x)
         {
-            match self.rank_select_structure.rank_0(x-1) {
-                Some(i) => {
-                    match self.rank_select_structure.select_1(i) {
-                        Some(y) => {
-                            match self.prev_0(y) {
-                                Some(prev_zero_y) => {
-                                    let result = y - prev_zero_y;
-                                    Some(result)
-                                },
-                                None => {None}
-                            }
+            match self.rank_select_structure.rank_1(x) {
+                Some(rank1_x) => {
+                    match self.rank_select_structure.select_0(rank1_x + i) {
+                        Some(select0_rank1_x_i) => {
+                            let result = select0_rank1_x_i + 1;
+                            Some(result)
                         },
                         None => {None}
                     }
