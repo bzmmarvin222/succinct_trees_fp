@@ -104,7 +104,7 @@ impl RangeMinMaxTree {
         else {
             let mut currentLeaf = (self.tree.len()/2) + (i/self.blocksize);
             let mut startbit = (currentLeaf - self.tree.len()/2) * self.blocksize;
-            let rank: u64 = 0;
+            let mut rank: u64 = 0;
             for j in startbit .. i {
                 if self.bitvector[j as u64] {
                     rank += 1;
@@ -139,7 +139,7 @@ impl RangeMinMaxTree {
     fn select_1_from_tree(&self, k:usize, node: usize) -> usize{
         if node >= (self.tree.len()/2) {
             let startbit = (node - self.tree.len()/2) * self.blocksize;
-            let select = 0;
+            let mut select = 0;
             for j in startbit .. startbit + (self.blocksize-1) {
                 if self.bitvector[j as u64] {
                     select += 1;
@@ -166,7 +166,7 @@ impl RangeMinMaxTree {
     fn select_0_from_tree(&self, k:usize, node: usize) -> usize{
         if node >= (self.tree.len()/2) {
             let startbit = (node - self.tree.len()/2) * self.blocksize;
-            let select = 0;
+            let mut select = 0;
             for j in startbit .. startbit + (self.blocksize-1) {
                 if !self.bitvector[j as u64] {
                     select += 1;
@@ -189,22 +189,7 @@ impl RangeMinMaxTree {
     }
 
     fn fwdsearch(&self, i: usize, d: i64) -> Option<usize>{
-        let k = match i % self.blocksize {
-            0 => i / self.blocksize,
-            _ => i / self.blocksize +1,
-        };
-        let found_dist = 0;
-        for j in (i+1) .. k*self.blocksize {
-            if self.bitvector[j] {
-                found_dist += 1;
-            }
-            else {
-                found_dist -= 0;
-            }
-            if found_dist == d {
-                Some(j);
-            }
-        }
+        unimplemented!();
 
     }
 
