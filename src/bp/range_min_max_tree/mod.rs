@@ -7,7 +7,7 @@ pub struct rmm_Node {
     pub excess:  i64,
     pub min_excess: i64,
     pub max_excess: i64,
-    pub count_bits: usize,
+    pub count_bits: u64,
 }
 
 impl rmm_Node {
@@ -98,33 +98,32 @@ impl RangeMinMaxTree {
     }
 
     fn rank_1(&self, i: usize) -> Option<usize>{
-        if (i >= self.bitvector.len()) {
+        if i >= self.bitvector.len() as usize {
             None
         }
         else {
             let mut currentLeaf = (self.tree.len()/2) + (i/self.blocksize);
             let mut startbit = (currentLeaf - self.tree.len()/2) * self.blocksize;
-            let rank = 0;
+            let rank: u64 = 0;
             for j in startbit .. i {
-                if self.bitvector[j] {
+                if self.bitvector[j as u64] {
                     rank += 1;
                 }
             }
             let  mut parent = (currentLeaf - 1) /2;
             while parent > 0 {
                 let left = 2*parent +1;
-                rank += (self.tree[left].count_bits + self.tree[left].excess) /2;
+                let mut temp = self.tree[left].count_bits as i64 + self.tree[left].excess;
+                assert!(temp >= 0);
+                rank += temp as u64 / 2;
                 let parent = (currentLeaf - 1) /2;
             }
-            Some(rank)
+            Some(rank as usize)
         }
 
     }
 
     fn rank_0(&self, i: usize) -> Option<usize>{
-        if(i >= self.bitvector.len()) {
-            None
-        }
         match self.rank_1(i) {
             None => None,
             Some(n) => Some (i-n),
@@ -132,12 +131,8 @@ impl RangeMinMaxTree {
     }
 
     fn select_1(&self, k: usize) -> Option<usize>{
-        if k > self.blocksize.len()/2 {
-            None
-        }
-        else {
             Some (self.select_1_from_tree(k, 0))
-        }
+
 
     }
 
@@ -146,52 +141,54 @@ impl RangeMinMaxTree {
             let startbit = (node - self.tree.len()/2) * self.blocksize;
             let select = 0;
             for j in startbit .. startbit + (self.blocksize-1) {
-                if self.bitvector[j] {
+                if self.bitvector[j as u64] {
                     select += 1;
                 }
             }
             select
         }
-        else if (self.tree[2*node+1].count_bits + self.tree[2*node+1].excess)/2 >= k {
+        else if (self.tree[2*node+1].count_bits as i64 + self.tree[2*node+1].excess)/2 >= k as i64 {
             self.select_1_from_tree(k, 2*node+1)
         }
         else {
-            self.tree[2*node+1].count_bits + self.select_1_from_tree(k - (self.tree[2*node+1].count_bits + self.tree[2*node+1].excess)/2, 2*node+2)
+            let temp = k as i64 - (self.tree[2 * node + 1 as usize].count_bits as i64 +
+          self.tree[2 * node + 1 as usize].excess as i64) / 2 as i64;
+            assert!( temp >= 0);
+            self.tree[2*node+1 as usize].count_bits as usize + self.select_1_from_tree(temp as usize,
+            2 * node + 2 as usize)
         }
     }
 
     fn select_0(&self, k: usize) -> Option<usize>{
-        if k > self.blocksize.len()/2 {
-            None
-        }
-        else {
             Some (self.select_0_from_tree(k, 0))
-        }
     }
 
-    fn select_1_from_tree(&self, k:usize, node: usize) -> usize{
+    fn select_0_from_tree(&self, k:usize, node: usize) -> usize{
         if node >= (self.tree.len()/2) {
             let startbit = (node - self.tree.len()/2) * self.blocksize;
             let select = 0;
             for j in startbit .. startbit + (self.blocksize-1) {
-                if !self.bitvector[j] {
+                if !self.bitvector[j as u64] {
                     select += 1;
                 }
             }
             select
         }
-        else if (self.tree[2*node+1].count_bits - (self.tree[2*node+1].count_bits + self.tree[2*node+1].excess)/2) >= k {
+        else if (self.tree[2*node+1].count_bits as i64 - (self.tree[2*node+1].count_bits as i64 + self.tree[2*node+1].excess)/2) >= k as i64{
             self.select_1_from_tree(k, 2*node+1)
         }
         else {
-            self.tree[2*node+1].count_bits + self.select_1_from_tree(k - (self.tree[2*node+1].count_bits - (self.tree[2*node+1].count_bits + self.tree[2*node+1].excess)/2), 2*node+2)
+            let temp = k as i64 -
+                (self.tree[2*node+1 as usize].count_bits as i64 -
+                    (self.tree[2*node+1 as usize].count_bits as i64 +
+                        self.tree[2*node+1 as usize].excess)/2);
+            assert!(temp >= 0);
+            self.tree[2*node+1 as usize].count_bits as usize +
+            self.select_1_from_tree(temp as usize, 2*node+2)
         }
     }
 
     fn fwdsearch(&self, i: usize, d: i64) -> Option<usize>{
-        if i >= self.bitvector.len() {
-            None
-        }
         let k = match i % self.blocksize {
             0 => i / self.blocksize,
             _ => i / self.blocksize +1,
@@ -205,7 +202,7 @@ impl RangeMinMaxTree {
                 found_dist -= 0;
             }
             if found_dist == d {
-                j
+                Some(j);
             }
         }
 
