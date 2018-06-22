@@ -14,8 +14,10 @@ use bincode::serialize;
 use bincode::deserialize;
 
 trait SuccinctTree: Sized {
-    fn new(vec: BitVec) -> Self;
-    fn vec(&self) -> BitVec;
+    fn new(vec: BitVec<u8>) -> Self;
+
+    fn vec(&self) -> BitVec<u8>;
+
     fn from_binary_representation(bin: String) -> Self {
         let braces = bin.replace("1", "(").replace("0", ")");
         Self::from_braces_representation(bin)
@@ -51,6 +53,23 @@ trait SuccinctTree: Sized {
     }
     fn serialize(&self) -> Vec<u8>;
     fn deserialize(serialized: Vec<u8>) -> Self;
+
+
+    // constant time for both
+    fn is_leaf(&self, x : u64) -> Option<bool>;
+    fn parent(&self, x : u64) -> Option<u64>;
+    fn first_child(&self, x : u64) -> Option<u64>;
+    fn next_sibling(&self, x : u64) -> Option<u64>;
+
+    // constant time for BP
+    fn ansestor(&self, x : u64, y : u64) -> Option<bool>;
+    fn depth(&self, x : u64) -> Option<u64>;
+    fn subtree_size(&self, x : u64) -> Option<u64>;
+
+    // constant time for LOUDS
+    fn child(&self, x : u64, i : u64) -> Option<u64>;
+    fn degree(&self, x : u64) -> Option<u64>;
+    fn child_rank(&self, x : u64) -> Option<u64>;
 }
 
 #[cfg(test)]

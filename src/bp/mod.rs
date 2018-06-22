@@ -8,26 +8,27 @@ use SuccinctTree;
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct BalancedParentheses {
-    vec: BitVec
+    vec: BitVec<u8>
 }
 
 impl BalancedParentheses {
-    fn rank_closing_brace(&self, index: usize) -> usize {
+
+    fn rank_closing_brace(&self, index: u64) -> usize {
         //TODO: real impl
         3
     }
 
-    fn rank_opening_brace(&self, index: usize) -> usize {
+    fn rank_opening_brace(&self, index: u64) -> usize {
         //TODO: real impl
         4
     }
 
-    fn find_close(&self, index: usize) -> usize {
+    fn find_close(&self, index: u64) -> usize {
         //TODO: real impl
         5
     }
 
-    fn is_leaf(&self, index: usize) -> bool {
+/*    fn is_leaf(&self, index: usize) -> bool {
         //TODO: real impl
         true
     }
@@ -55,7 +56,7 @@ impl BalancedParentheses {
     fn subtree_size(&self, index: usize) -> usize {
         //TODO: real impl
         5
-    }
+    }*/
 }
 
 impl SuccinctTree for BalancedParentheses {
@@ -76,6 +77,61 @@ impl SuccinctTree for BalancedParentheses {
     fn deserialize(serialized: Vec<u8>) -> BalancedParentheses {
         deserialize(&serialized[..]).unwrap()
     }
+
+
+    fn is_leaf(&self, x : u64) -> Option<bool>{
+        //TODO: real impl
+        Some(true)
+    }
+
+    fn parent(&self, x : u64) -> Option<u64> {
+        //TODO: real impl
+        Some(5)
+    }
+
+    fn first_child(&self, x : u64) -> Option<u64>{
+        //TODO: real impl
+        Some(5)
+    }
+
+    fn next_sibling(&self, x : u64) -> Option<u64>{
+        //TODO: real impl
+        Some(5)
+    }
+
+
+    fn ansestor(&self, x : u64, y : u64) -> Option<bool>{
+        //TODO: real impl
+        Some(true)
+    }
+
+    fn depth(&self, x : u64) -> Option<u64>{
+        //TODO: real impl
+        Some(5)
+    }
+
+    fn subtree_size(&self, x : u64) -> Option<u64>{
+        //TODO: real impl
+        Some(5)
+    }
+
+    //these functions need more than constant time
+    //to be implemented
+    fn child(&self, x : u64, i : u64) -> Option<u64>{
+        //TODO: real impl
+        Some(5)
+    }
+
+    fn degree(&self, x : u64) -> Option<u64>{
+        //TODO: real impl
+        Some(5)
+    }
+
+    fn child_rank(&self, x : u64) -> Option<u64>{
+        //TODO: real impl
+        Some(5)
+    }
+
 }
 
 #[cfg(test)]

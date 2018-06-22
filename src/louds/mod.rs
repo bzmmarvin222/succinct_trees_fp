@@ -6,6 +6,7 @@ extern crate bio;
 use self::bio::data_structures::rank_select::RankSelect;
 use self::bv::BitVec;
 use self::bincode::{serialize, deserialize};
+use SuccinctTree;
 
 #[derive(Serialize, Deserialize)]
 pub struct LOUDS{
@@ -13,19 +14,7 @@ pub struct LOUDS{
     rank_select_structure: RankSelect
 }
 
-impl LOUDS{
-    fn new(vector: BitVec<u8>) -> LOUDS {
-    //    k = (log(vector.bit_len()) hoch 2)/32;
-        let k=1;
-        // vector is a bv BitVec<Block = usize>
-        // usize is u8 of a 64 bit mashine and u4 of a 32 bit mashine
-        // u8 vertor shall be a bv BitVec<Block = u8>
-        LOUDS {
-            vec: (&vector).to_owned(),
-            rank_select_structure: RankSelect::new(vector,k)
-        }
-    }
-
+impl LOUDS {
     fn from_binary_represantation(bin: String) -> LOUDS {
         //TODO: real impl
         LOUDS::new(BitVec::new_fill(true, 8))
@@ -85,6 +74,37 @@ impl LOUDS{
         else{None}
     }
 
+}
+
+impl SuccinctTree for LOUDS {
+    fn new(vector: BitVec<u8>) -> LOUDS {
+    //    k = (log(vector.bit_len()) hoch 2)/32;
+        let k=1;
+        // vector is a bv BitVec<Block = usize>
+        // usize is u8 of a 64 bit mashine and u4 of a 32 bit mashine
+        // u8 vertor shall be a bv BitVec<Block = u8>
+        LOUDS {
+            vec: (&vector).to_owned(),
+            rank_select_structure: RankSelect::new(vector,k)
+        }
+    }
+
+    fn vec(&self) -> BitVec<u8> {
+        (&self.vec).to_owned()
+    }
+
+    fn serialize(&self) -> Vec<u8> {
+        serialize(self).unwrap()
+    }
+
+    fn deserialize(serialized: Vec<u8>) -> LOUDS {
+        deserialize(&serialized[..]).unwrap()
+    }
+
+    //never pass negative numbers as parameters in this class
+
+        // from here x,y are the elements of the sequence, which
+        // represent a node. So, in vec there is 0 at the Position x - 1,y - 1
 
     // whether x is a leaf
     fn is_leaf(&self, x : u64) -> Option<bool> {
@@ -207,6 +227,25 @@ impl LOUDS{
         else {None}
     }
 
+    fn first_child(&self, x : u64) -> Option<u64> {
+        self.child(x,1)
+    }
+
+    //these functions need more than constant time
+    //to be implemented
+    fn ansestor(&self, x : u64, y : u64) -> Option<bool>{
+        Some(true)
+    }
+
+
+    fn depth(&self, x : u64) -> Option<u64>{
+        Some(9)
+    }
+
+
+    fn subtree_size(&self, x : u64) -> Option<u64>{
+        Some(9)
+    }
 
 
 }
