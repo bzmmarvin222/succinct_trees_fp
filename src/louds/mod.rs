@@ -103,6 +103,11 @@ impl SuccinctTree for LOUDS {
 
     //never pass negative numbers as parameters in this class
 
+    fn index_represents_node(&self, x : u64) -> bool {
+        let result = (self.vec[x-1] == false);
+        result
+    }
+
         // from here x,y are the elements of the sequence, which
         // represent a node. So, in vec there is 0 at the Position x - 1,y - 1
 
@@ -233,7 +238,7 @@ impl SuccinctTree for LOUDS {
 
     //these functions need more than constant time
     //to be implemented
-    fn ansestor(&self, x : u64, y : u64) -> Option<bool>{
+    fn ancestor(&self, x : u64, y : u64) -> Option<bool>{
         Some(true)
     }
 

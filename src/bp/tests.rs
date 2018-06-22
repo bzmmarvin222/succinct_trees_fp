@@ -152,18 +152,18 @@ fn test_index_represents_node(){
             2  4
 
     */
-    assert_eq!(true, balanced_parenthesis1.represents_node(0));
-    assert_eq!(true, balanced_parenthesis1.represents_node(4));
-    assert_eq!(true, balanced_parenthesis1.represents_node(1));
-    assert_eq!(false, balanced_parenthesis1.represents_node(5));
-    assert_eq!(false, balanced_parenthesis1.represents_node(8));
+    assert_eq!(true, balanced_parenthesis1.index_represents_node(0));
+    assert_eq!(true, balanced_parenthesis1.index_represents_node(4));
+    assert_eq!(true, balanced_parenthesis1.index_represents_node(1));
+    assert_eq!(false, balanced_parenthesis1.index_represents_node(5));
+    assert_eq!(false, balanced_parenthesis1.index_represents_node(8));
     // what if balanced_parenthesis1.represents_node(25)??
     // what if balanced_parenthesis1.represents_node(-3)??
     //will negative number interpreted as positive?
 
     let balanced_parenthesis2 = BalancedParentheses::from_braces_representation(String::from("()"));
-    assert_eq!(true, balanced_parenthesis2.represents_node(0));
-    assert_eq!(false, balanced_parenthesis2.represents_node(1));
+    assert_eq!(true, balanced_parenthesis2.index_represents_node(0));
+    assert_eq!(false, balanced_parenthesis2.index_represents_node(1));
     // what if balanced_parenthesis2.represents_node(2)??
 
     let balanced_parenthesis3 = BalancedParentheses::from_braces_representation(String::from(""));
@@ -176,9 +176,9 @@ fn test_index_represents_node(){
             /  / \ \ \
            1  3  5 7 9
     */
-    assert_eq!(true, balanced_parenthesis4.represents_node(0));
-    assert_eq!(true, balanced_parenthesis4.represents_node(5));
-    assert_eq!(false, balanced_parenthesis4.represents_node(6));
+    assert_eq!(true, balanced_parenthesis4.index_represents_node(0));
+    assert_eq!(true, balanced_parenthesis4.index_represents_node(5));
+    assert_eq!(false, balanced_parenthesis4.index_represents_node(6));
     // what if balanced_parenthesis4.represents_node(13)??
     // what if balanced_parenthesis4.represents_node(42)??
 }

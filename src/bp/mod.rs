@@ -60,13 +60,13 @@ impl BalancedParentheses {
 }
 
 impl SuccinctTree for BalancedParentheses {
-    fn new(vector: BitVec) -> BalancedParentheses {
+    fn new(vector: BitVec<u8>) -> BalancedParentheses {
         BalancedParentheses {
             vec: vector
         }
     }
 
-    fn vec(&self) -> BitVec<usize> {
+    fn vec(&self) -> BitVec<u8> {
         (&self.vec).to_owned()
     }
 
@@ -78,6 +78,10 @@ impl SuccinctTree for BalancedParentheses {
         deserialize(&serialized[..]).unwrap()
     }
 
+    fn index_represents_node(&self, x : u64) -> bool{
+        //TODO: real impl
+        true
+    }
 
     fn is_leaf(&self, x : u64) -> Option<bool>{
         //TODO: real impl
@@ -100,7 +104,7 @@ impl SuccinctTree for BalancedParentheses {
     }
 
 
-    fn ansestor(&self, x : u64, y : u64) -> Option<bool>{
+    fn ancestor(&self, x : u64, y : u64) -> Option<bool>{
         //TODO: real impl
         Some(true)
     }
