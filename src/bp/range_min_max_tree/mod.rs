@@ -2,6 +2,7 @@ extern crate bv;
 use self::bv::BitVec;
 use std::cmp;
 
+#[derive(Default, Debug, PartialEq)]
 pub struct rmm_Node {
     pub excess:  i64,
     pub min_excess: i64,
