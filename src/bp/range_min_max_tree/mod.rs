@@ -131,8 +131,12 @@ impl RangeMinMaxTree {
     }
 
     fn select_1(&self, k: usize) -> Option<usize>{
-            Some (self.select_1_from_tree(k, 0))
-
+            if k < 1 || k >= (self.bitvector.len()/2) as usize {
+                None
+            }
+            else {
+                Some (self.select_1_from_tree(k, 0))
+            }
 
     }
 
@@ -160,7 +164,12 @@ impl RangeMinMaxTree {
     }
 
     fn select_0(&self, k: usize) -> Option<usize>{
+        if k < 1 || k >= (self.bitvector.len()/2) as usize {
+            None
+        }
+        else {
             Some (self.select_0_from_tree(k, 0))
+        }
     }
 
     fn select_0_from_tree(&self, k:usize, node: usize) -> usize{
