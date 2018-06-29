@@ -20,7 +20,7 @@ trait SuccinctTree: Sized {
 
     fn from_binary_representation(bin: String) -> Self {
         let braces = bin.replace("1", "(").replace("0", ")");
-        Self::from_braces_representation(bin)
+        Self::from_braces_representation(braces)
     }
     fn from_braces_representation(braces: String) -> Self {
         let mut vect = BitVec::new();
