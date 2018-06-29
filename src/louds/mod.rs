@@ -15,16 +15,6 @@ pub struct LOUDS{
 }
 
 impl LOUDS {
-    fn from_binary_represantation(bin: String) -> LOUDS {
-        //TODO: real impl
-        LOUDS::new(BitVec::new_fill(true, 8))
-    }
-
-    fn from_braces_represantation(braces: String) -> LOUDS {
-        //TODO: real impl
-        LOUDS::new(BitVec::new_fill(true, 8))
-    }
-
     fn binary_representation() -> String {
         //TODO: real impl
         String::from("01010101")
@@ -247,3 +237,6 @@ impl SuccinctTree for LOUDS {
 
 
 }
+
+#[cfg(test)]
+mod tests;
