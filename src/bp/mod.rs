@@ -69,15 +69,16 @@ impl SuccinctTree for BalancedParentheses {
     }
 
     fn first_child(&self, x : u64) -> Option<u64>{
-        //TODO: real impl
-        Some(5)
+        if !self.index_represents_node(x) || !self.vec[x + 1]{
+            return None;
+        }
+        Some(x + 1)
     }
 
     fn next_sibling(&self, x : u64) -> Option<u64>{
         //TODO: real impl
         Some(5)
     }
-
 
     fn ancestor(&self, x : u64, y : u64) -> Option<bool>{
         if !self.has_index(x) || !self.has_index(y) {

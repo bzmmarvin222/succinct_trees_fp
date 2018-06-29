@@ -65,6 +65,18 @@ fn test_index_represents_node() {
     assert_eq!(true, bp.index_represents_node(2));
     assert_eq!(false, bp.index_represents_node(3));
 }
+
+#[test]
+fn test_first_child() {
+    let bp = BalancedParentheses::from_braces_representation(String::from("()"));
+    assert_eq!(None, bp.first_child(0));
+    assert_eq!(None, bp.first_child(1));
+
+    let bp = BalancedParentheses::from_braces_representation(String::from("((()())())"));
+    assert_eq!(None, bp.first_child(2));
+    assert_eq!(Some(2), bp.first_child(1));
+}
+
 //#[test]
 //fn test_rank_closing_brace(){
 //    let balanced_parenthesis1 = BalancedParentheses::from_braces_representation(String::from("((()())())"));
