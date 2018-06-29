@@ -13,6 +13,10 @@ pub struct BalancedParentheses {
 
 impl BalancedParentheses {
 
+    fn has_index(&self, index: u64) -> bool {
+        index < self.vec.len()
+    }
+
     fn rank_closing_brace(&self, index: u64) -> usize {
         //TODO: real impl
         3
@@ -23,40 +27,10 @@ impl BalancedParentheses {
         4
     }
 
-    fn find_close(&self, index: u64) -> usize {
+    fn find_close(&self, index: u64) -> u64 {
         //TODO: real impl
         5
     }
-
-/*    fn is_leaf(&self, index: usize) -> bool {
-        //TODO: real impl
-        true
-    }
-
-    fn represents_node(&self, index: usize) -> bool {
-        //TODO: real impl
-        true
-    }
-
-    fn ancestor(&self, index_to_test: usize, index_ancestor: usize) -> bool {
-        //TODO: real impl
-        true
-    }
-
-    fn parent(&self, index: usize) -> usize {
-        //TODO: real impl
-        5
-    }
-
-    fn first_child(&self, index: usize) -> usize {
-        //TODO: real impl
-        5
-    }
-
-    fn subtree_size(&self, index: usize) -> usize {
-        //TODO: real impl
-        5
-    }*/
 }
 
 impl SuccinctTree for BalancedParentheses {
@@ -78,13 +52,12 @@ impl SuccinctTree for BalancedParentheses {
         deserialize(&serialized[..]).unwrap()
     }
 
-    fn index_represents_node(&self, x : u64) -> bool{
-        //TODO: real impl
-        true
+    fn index_represents_node(&self, x : u64) -> bool {
+        self.vec[x]
     }
 
     fn is_leaf(&self, x : u64) -> Option<bool>{
-        if x > self.vec.len() - 2 {
+        if !self.has_index(x + 1) {
             return None;
         }
         Some(self.vec[x] && !self.vec[x+1])
@@ -107,8 +80,10 @@ impl SuccinctTree for BalancedParentheses {
 
 
     fn ancestor(&self, x : u64, y : u64) -> Option<bool>{
-        //TODO: real impl
-        Some(true)
+        if !self.has_index(x) || !self.has_index(y) {
+            return None;
+        }
+        Some(x <= y && y <= self.find_close(x))
     }
 
     fn depth(&self, x : u64) -> Option<u64>{

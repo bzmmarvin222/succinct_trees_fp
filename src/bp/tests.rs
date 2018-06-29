@@ -48,6 +48,23 @@ fn test_is_leaf() {
     assert_eq!(Some(false), bp.is_leaf(1));
 }
 
+#[test]
+fn test_has_index() {
+    let bp = BalancedParentheses::from_braces_representation(String::from("()"));
+    assert_eq!(true, bp.has_index(1));
+    assert_eq!(false, bp.has_index(2));
+}
+
+#[test]
+fn test_index_represents_node() {
+    let bp = BalancedParentheses::from_braces_representation(String::from("()"));
+    assert_eq!(true, bp.index_represents_node(0));
+    assert_eq!(false, bp.index_represents_node(1));
+
+    let bp = BalancedParentheses::from_braces_representation(String::from("((()())())"));
+    assert_eq!(true, bp.index_represents_node(2));
+    assert_eq!(false, bp.index_represents_node(3));
+}
 //#[test]
 //fn test_rank_closing_brace(){
 //    let balanced_parenthesis1 = BalancedParentheses::from_braces_representation(String::from("((()())())"));
