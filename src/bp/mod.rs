@@ -84,8 +84,10 @@ impl SuccinctTree for BalancedParentheses {
     }
 
     fn is_leaf(&self, x : u64) -> Option<bool>{
-        //TODO: real impl
-        Some(true)
+        if x > self.vec.len() - 2 {
+            return None;
+        }
+        Some(self.vec[x] && !self.vec[x+1])
     }
 
     fn parent(&self, x : u64) -> Option<u64> {
