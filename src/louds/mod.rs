@@ -15,15 +15,6 @@ pub struct LOUDS{
 }
 
 impl LOUDS {
-    fn binary_representation() -> String {
-        //TODO: real impl
-        String::from("01010101")
-    }
-
-    fn braces_represantation() -> String {
-        //TODO: real impl
-        String::from("((()())())")
-    }
 
 //never pass negative numbers as parameters in this class
 
