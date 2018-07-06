@@ -5,12 +5,16 @@ extern crate bv;
 use self::bv::*;
 use self::bincode::{serialize, deserialize};
 use SuccinctTree;
+use bp::range_min_max_tree::RangeMinMaxTree;
+use std::cmp;
+
 
 mod range_min_max_tree;
 
 #[derive(Serialize, Deserialize, PartialEq, Debug)]
 pub struct BalancedParentheses {
-    vec: BitVec<u8>
+    vec: BitVec<usize>,
+    rmm: RangeMinMaxTree
 }
 
 impl BalancedParentheses {
@@ -36,13 +40,17 @@ impl BalancedParentheses {
 }
 
 impl SuccinctTree for BalancedParentheses {
-    fn new(vector: BitVec<u8>) -> BalancedParentheses {
+    fn new(vector: BitVec<usize>) -> BalancedParentheses {
+        let next_pow = vector.len().next_power_of_two() as f64;
+        let blocksize = next_pow.log2() as usize;
+        let sanitized_blocksize = cmp::max(blocksize, 8);
         BalancedParentheses {
-            vec: vector
+            vec: (&vector).to_owned(),
+            rmm: RangeMinMaxTree::new(vector, sanitized_blocksize)
         }
     }
 
-    fn vec(&self) -> BitVec<u8> {
+    fn vec(&self) -> BitVec<usize> {
         (&self.vec).to_owned()
     }
 
