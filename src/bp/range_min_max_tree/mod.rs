@@ -2,7 +2,7 @@ extern crate bv;
 use self::bv::BitVec;
 use std::cmp;
 
-#[derive(Default, Debug, PartialEq)]
+#[derive(Serialize, Deserialize, Default, Debug, PartialEq)]
 pub struct rmm_Node {
     pub excess:  i64,
     pub min_excess: i64,
@@ -22,8 +22,7 @@ impl rmm_Node {
 
 }
 
-
-#[derive(Default)]
+#[derive(Serialize, Deserialize, PartialEq, Debug, Default)]
 pub struct RangeMinMaxTree {
     blocksize: usize,
     tree: Vec<rmm_Node>,

@@ -51,9 +51,37 @@ impl LOUDS {
         else{None}
     }
 
+    fn from_binary_representation(bin: String) -> Self {
+        let mut vect = BitVec::new();
+        for b in bin.chars() {
+            if b == '1' {
+                vect.push(true);
+            } else if b == '0' {
+                vect.push(false);
+            } else {
+                panic!("only 1 and 0 allowed");
+            }
+        }
+        Self::new(vect)
+    }
+
+    fn binary_representation(&self) -> String{
+        let vec = &self.vec();
+        let mut result = String::new();
+
+        for i in 0..vec.len() {
+            if vec.as_slice()[i] {
+                result.push('1');
+            } else {
+                result.push('0');
+            }
+        }
+        result
+    }
+
 }
 
-impl SuccinctTree for LOUDS {
+impl SuccinctTree<u8> for LOUDS {
     fn new(vector: BitVec<u8>) -> LOUDS {
     //    k = (log(vector.bit_len()) hoch 2)/32;
         let k=1;
