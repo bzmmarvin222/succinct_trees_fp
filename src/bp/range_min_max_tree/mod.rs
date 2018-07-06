@@ -202,8 +202,6 @@ impl RangeMinMaxTree {
             let mut j = startbit;
             while j <= (startbit + (self.blocksize-1)) {
                 select +=1;
-                println!("j {:?}", j);
-                println!("select {:?}", select);
                 if self.bitvector[j as u64] {
                     tmp += 1;
                     if tmp == k {
@@ -212,7 +210,6 @@ impl RangeMinMaxTree {
                 }
                 j +=1;
             }
-            println!("select {:?}", select);
             select
         }
         else if (self.tree[2*node+1].count_bits as i64 + self.tree[2*node+1].excess)/2 >= k as i64 {
@@ -222,9 +219,9 @@ impl RangeMinMaxTree {
             let temp = k as i64 - (self.tree[2 * node + 1 as usize].count_bits as i64 +
           self.tree[2 * node + 1 as usize].excess as i64) / 2 as i64;
             assert!( temp >= 0);
-            println!("bits left{:?}", self.tree[2*node+1 as usize].count_bits as usize);
-            println!("to add{:?}", self.select_1_from_tree(temp as usize,
-            2 * node + 2 as usize));
+            //println!("bits left{:?}", self.tree[2*node+1 as usize].count_bits as usize);
+            //println!("to add{:?}", self.select_1_from_tree(temp as usize,
+//            2 * node + 2 as usize));
             self.tree[2*node+1 as usize].count_bits as usize + self.select_1_from_tree(temp as usize,
             2 * node + 2 as usize)
         }
