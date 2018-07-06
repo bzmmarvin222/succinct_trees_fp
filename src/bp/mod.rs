@@ -19,7 +19,7 @@ pub struct BalancedParentheses {
 
 impl BalancedParentheses {
 
-    fn has_index(&self, index: u64) -> bool {
+    fn has_index(&self, index: usize) -> bool {
         index < self.vec.len()
     }
 
@@ -33,9 +33,9 @@ impl BalancedParentheses {
         4
     }
 
-    fn find_close(&self, index: u64) -> u64 {
-        //TODO: real impl
-        5
+    fn find_close(&self, index: usize) -> Option<usize> {
+        //self.rmm.fwdsearch(index, -1)
+        Some(5)
     }
 
     fn from_braces_representation(braces: String) -> Self {
@@ -90,64 +90,65 @@ impl SuccinctTree<usize> for BalancedParentheses {
         deserialize(&serialized[..]).unwrap()
     }
 
-    fn index_represents_node(&self, x : u64) -> bool {
+    fn index_represents_node(&self, x : usize) -> bool {
         self.vec[x]
     }
 
-    fn is_leaf(&self, x : u64) -> Option<bool>{
+    fn is_leaf(&self, x : usize) -> Option<bool>{
         if !self.has_index(x + 1) {
             return None;
         }
         Some(self.vec[x] && !self.vec[x+1])
     }
 
-    fn parent(&self, x : u64) -> Option<u64> {
+    fn parent(&self, x : usize) -> Option<usize> {
         //TODO: real impl
         Some(5)
     }
 
-    fn first_child(&self, x : u64) -> Option<u64>{
+    fn first_child(&self, x : usize) -> Option<usize>{
         if !self.index_represents_node(x) || !self.vec[x + 1]{
             return None;
         }
         Some(x + 1)
     }
 
-    fn next_sibling(&self, x : u64) -> Option<u64>{
+    fn next_sibling(&self, x : usize) -> Option<usize>{
         //TODO: real impl
         Some(5)
     }
 
-    fn ancestor(&self, x : u64, y : u64) -> Option<bool>{
+    fn ancestor(&self, x : usize, y : usize) -> Option<bool>{
         if !self.has_index(x) || !self.has_index(y) {
             return None;
         }
-        Some(x <= y && y <= self.find_close(x))
+        let gt_find_close = self.find_close(x)? > y;
+        Some(x <= y && gt_find_close)
     }
 
-    fn depth(&self, x : u64) -> Option<u64>{
+    fn depth(&self, x : usize) -> Option<usize>{
         //TODO: real impl
         Some(5)
     }
 
-    fn subtree_size(&self, x : u64) -> Option<u64>{
+    fn subtree_size(&self, x : usize) -> Option<usize>{
         //TODO: real impl
         Some(5)
     }
 
     //these functions need more than constant time
     //to be implemented
-    fn child(&self, x : u64, i : u64) -> Option<u64>{
+    fn child(&self, x : usize, i : usize) -> Option<usize>{
         //TODO: real impl
         Some(5)
     }
 
-    fn degree(&self, x : u64) -> Option<u64>{
+    fn degree(&self, x : usize) -> Option<usize>{
         //TODO: real impl
         Some(5)
     }
 
-    fn child_rank(&self, x : u64) -> Option<u64>{
+    fn child_rank(&self, x : usize) -> Option<usize>{
         //TODO: real impl
         Some(5)
     }

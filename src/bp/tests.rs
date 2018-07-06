@@ -77,6 +77,14 @@ fn test_first_child() {
     assert_eq!(Some(2), bp.first_child(1));
 }
 
+
+#[test]
+fn test_findclose() {
+    let bp = BalancedParentheses::from_braces_representation(String::from("((()())())"));
+    assert_eq!(Some(3), bp.find_close(2));
+    assert_eq!(Some(2), bp.find_close(3));
+    assert_eq!(None, bp.find_close(30));
+}
 //#[test]
 //fn test_rank_closing_brace(){
 //    let balanced_parenthesis1 = BalancedParentheses::from_braces_representation(String::from("((()())())"));

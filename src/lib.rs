@@ -22,27 +22,24 @@ trait SuccinctTree<T>: Sized {
     fn deserialize(serialized: Vec<u8>) -> Self;
 
     // constant time for both
-    fn index_represents_node(&self, x : u64) -> bool;
-    fn is_leaf(&self, x : u64) -> Option<bool>;
-    fn parent(&self, x : u64) -> Option<u64>;
-    fn first_child(&self, x : u64) -> Option<u64>;
-    fn next_sibling(&self, x : u64) -> Option<u64>;
+    fn index_represents_node(&self, x : usize) -> bool;
+    fn is_leaf(&self, x : usize) -> Option<bool>;
+    fn parent(&self, x : usize) -> Option<usize>;
+    fn first_child(&self, x : usize) -> Option<usize>;
+    fn next_sibling(&self, x : usize) -> Option<usize>;
 
     // constant time for BP
-    fn ancestor(&self, x : u64, y : u64) -> Option<bool>;
-    fn depth(&self, x : u64) -> Option<u64>;
-    fn subtree_size(&self, x : u64) -> Option<u64>;
+    fn ancestor(&self, x : usize, y : usize) -> Option<bool>;
+    fn depth(&self, x : usize) -> Option<usize>;
+    fn subtree_size(&self, x : usize) -> Option<usize>;
 
     // constant time for LOUDS
-    fn child(&self, x : u64, i : u64) -> Option<u64>;
-    fn degree(&self, x : u64) -> Option<u64>;
-    fn child_rank(&self, x : u64) -> Option<u64>;
+    fn child(&self, x : usize, i : usize) -> Option<usize>;
+    fn degree(&self, x : usize) -> Option<usize>;
+    fn child_rank(&self, x : usize) -> Option<usize>;
 }
 
 #[cfg(test)]
 mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
+
 }
