@@ -78,8 +78,13 @@ impl SuccinctTree for LOUDS {
     //never pass negative numbers as parameters in this class
 
     fn index_represents_node(&self, x : u64) -> bool {
-        let result = (self.vec[x-1] == false);
-        result
+        if x<1 {
+            false
+        }
+        else{
+            let result = (self.vec[x-1] == false) || (x==1);
+            result
+        }
     }
 
         // from here x,y are the elements of the sequence, which
@@ -212,18 +217,73 @@ impl SuccinctTree for LOUDS {
 
     //these functions need more than constant time
     //to be implemented
-    fn ancestor(&self, x : u64, y : u64) -> Option<bool>{
-        Some(true)
+
+    //returns whether x is an ansestor of y
+    fn ancestor(&self, x : u64, c : u64) -> Option<bool>{
+        if(self.index_represents_node(x) && self.index_represents_node(c)){
+            let mut y = c;
+            while(y>x){
+                match self.parent(y){
+                    Some(parent_y) => {
+                        y = parent_y;
+                    },
+                    None => {return Some(false)}
+                }
+            }
+            if(y==x){return Some(true)}
+            else {return Some(false)}
+        }
+        None
     }
 
-
-    fn depth(&self, x : u64) -> Option<u64>{
-        Some(9)
+    //quantity of nodes in the path from root to c node
+      fn depth(&self, c : u64) -> Option<u64>{
+        if(self.index_represents_node(c)){
+            let mut x = c;
+            let mut levels_passed = 0;
+            while(x>1){
+                match self.parent(x){
+                    Some(parent_x) => {
+                        x = parent_x;
+                        levels_passed = levels_passed +1;
+                    },
+                    None => {return None}
+                }
+            }
+            if(x==1){return Some(levels_passed + 1)}
+            else {return None}
+        }
+        None
     }
 
-
+    // subtree_size(x) = 1 + add all (subtree_size(current_child) where current_child = child(x,i))
     fn subtree_size(&self, x : u64) -> Option<u64>{
-        Some(9)
+        let mut result = 1;
+        //whether x a valid node is will be in degree controlled
+        //no need to do it twice
+        match self.degree(x){
+            Some(quant_children_x) => {
+                    for i in 1..quant_children_x
+                    {
+                        match self.child(x, i){
+                            Some(current_child) => {
+                                match self.subtree_size(current_child){
+                                    Some(current_child_subtree_size) =>{
+                                        result = result + current_child_subtree_size;
+                                    },
+                                    // if some child has a not valid subtree then there is an error
+                                    None => {return None}
+                                }
+
+                            },
+                            // if i-th child of x is not a valid node then there is an error
+                            None => {return None}
+                        }
+                    }
+                    return Some(result)
+            },
+            None => {None}
+        }
     }
 
 
