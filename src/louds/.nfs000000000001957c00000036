@@ -19,11 +19,8 @@ impl LOUDS {
 //never pass negative numbers as parameters in this class
 
     // from here x,y are the elements of the sequence, which
-    // represent a node. So, in vec there is 0 at the Position x - 1
+    // represent a node. So, in vec there is 0 at the Position x - 1,y - 1
 
-
-    //prev returns the 0 of the node before if at index x in rank_select_struckt there is 1
-    // prev0 returns x if at index x in rank_select_struckt there is 0
     fn prev_0(&self, x : u64) -> Option<u64> {
         if (self.index_represents_node(x))
         {
@@ -37,7 +34,7 @@ impl LOUDS {
         else{None}
     }
 
-    //next_0 returns always the 0 of the node after
+
     fn next_0(&self, x : u64) -> Option<u64> {
         if (self.index_represents_node(x))
         {
@@ -262,7 +259,7 @@ impl SuccinctTree for LOUDS {
     // subtree_size(x) = 1 + add all (subtree_size(current_child) where current_child = child(x,i))
     fn subtree_size(&self, x : u64) -> Option<u64>{
         let mut result = 1;
-        //whether x a valid node is will be controlled in degree(x)
+        //whether x a valid node is will be in degree controlled
         //no need to do it twice
         match self.degree(x){
             Some(quant_children_x) => {

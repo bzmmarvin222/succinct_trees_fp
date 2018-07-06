@@ -1,0 +1,22 @@
+
+*** These modified files were found in JOE when it aborted on Fri Jul  6 09:53:31 2018
+*** JOE was aborted because the terminal closed
+
+*** Datei '/home/shashk00/Schreibtisch/succinct_trees_fp/.git/MERGE_MSG'
+Merge branch 'develop' of https://github.com/bzmmarvin222/succinct_trees_fp into develop
+
+# Bitte geben Sie eine Commit-Beschreibung ein, um zu erklären, warum dieser
+# Merge erforderlich ist, insbesondere wenn es einen aktualisierten
+# Upstream-Branch mit einem Thema-Branch zusammenführt.
+#
+# Zeilen beginnend mit '#' werden ignoriert, und eine leere Beschreibung
+# bricht den Commit ab.
+
+*** Datei '(Unbenannt)'
+/home/shashk00/Schreibtisch/succinct_trees_fp/.git/COMMIT_EDITMSG
+/home/shashk00/Schreibtisch/succinct_trees_fp/.git/MERGE_MSG
+/home/shashk00/Schreibtisch/succinct_trees_fp/.git/MERGE_MSG
+
+*** Datei '* Startup Log *'
+Bearbeite '/etc/joe/editorrc'...Bearbeite '/etc/joe/ftyperc'...Finished processing /etc/joe/ftyperc
+Finished processing /etc/joe/editorrc
