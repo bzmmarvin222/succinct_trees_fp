@@ -345,7 +345,7 @@ impl RangeMinMaxTree {
     }
 
     pub fn bwdsearch(&self, i: usize, d: i64) -> Option<usize>{
-        None
+        unimplemented!();
     }
 }
 
