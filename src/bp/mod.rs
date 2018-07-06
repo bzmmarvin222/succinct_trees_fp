@@ -37,9 +37,37 @@ impl BalancedParentheses {
         //TODO: real impl
         5
     }
+
+    fn from_braces_representation(braces: String) -> Self {
+        let mut vect = BitVec::new();
+        for brace in braces.chars() {
+            if brace == '(' {
+                vect.push(true);
+            } else if brace == ')' {
+                vect.push(false);
+            } else {
+                panic!("only ( and ) allowed");
+            }
+        }
+        Self::new(vect)
+    }
+
+    fn braces_representation(&self) -> String {
+        let vec = &self.vec();
+        let mut result = String::new();
+
+        for i in 0..vec.len() {
+            if vec.as_slice()[i] {
+                result.push('(');
+            } else {
+                result.push(')');
+            }
+        }
+        result
+    }
 }
 
-impl SuccinctTree for BalancedParentheses {
+impl SuccinctTree<usize> for BalancedParentheses {
     fn new(vector: BitVec<usize>) -> BalancedParentheses {
         let next_pow = vector.len().next_power_of_two() as f64;
         let blocksize = next_pow.log2() as usize;
