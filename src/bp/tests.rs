@@ -78,7 +78,7 @@ fn test_first_child() {
 }
 
 #[test]
-fn test_findclose() {
+fn test_find_close() {
     let bp = BalancedParentheses::from_braces_representation(String::from("((()())())"));
     assert_eq!(Some(3), bp.find_close(2));
     assert_eq!(Some(2), bp.find_close(3));
@@ -91,6 +91,14 @@ fn test_ancestor() {
     assert_eq!(Some(true), bp.ancestor(1, 2));
     assert_eq!(Some(false), bp.ancestor(1, 7));
     assert_eq!(None, bp.ancestor(1, 20));
+}
+
+#[test]
+fn test_next_sibling() {
+    let bp = BalancedParentheses::from_braces_representation(String::from("((()())())"));
+    assert_eq!(None, bp.next_sibling(20));
+    assert_eq!(Some(4), bp.next_sibling(2));
+    assert_eq!(None, bp.next_sibling(4));
 }
 
 //#[test]

@@ -115,26 +115,35 @@ impl SuccinctTree<usize> for BalancedParentheses {
     }
 
     fn next_sibling(&self, x : usize) -> Option<usize>{
-        //TODO: real impl
-        Some(5)
+        if !self.index_represents_node(x) {
+            return None;
+        }
+        if let Some(index) = self.find_close(x) {
+            if self.vec[index + 1] {
+                return Some(index);
+            }
+        }
+        None
     }
 
     fn ancestor(&self, x : usize, y : usize) -> Option<bool>{
         if !self.has_index(x) || !self.has_index(y) {
             return None;
         }
-        let gt_find_close = self.find_close(x)? > y;
-        Some(x <= y && gt_find_close)
+        Option::from(x <= y && self.find_close(x)? > y)
     }
 
     fn depth(&self, x : usize) -> Option<usize>{
         //TODO: real impl
+        //depth(x)=rank1(x)−rank0(x)=excess(x)
         Some(5)
     }
 
     fn subtree_size(&self, x : usize) -> Option<usize>{
-        //TODO: real impl
-        Some(5)
+        if !self.index_represents_node(x) {
+            return None;
+        }
+        Option::from((self.find_close(x)? - x + 1) / 2)
     }
 
     //these functions need more than constant time
