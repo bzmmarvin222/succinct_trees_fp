@@ -227,5 +227,5 @@ fn valid_select_0() {
                         false, true, false, false,
                         false, false];
     let tree = RangeMinMaxTree::new(bitvec, 4);
-    assert_eq!(tree.select_0(3).unwrap(),9);
+    assert_eq!(tree.select_0(7).unwrap(),17);
 }
