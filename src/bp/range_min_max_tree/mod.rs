@@ -145,7 +145,7 @@ impl RangeMinMaxTree {
          heap
     }
 
-    fn rank_1(&self, i: usize) -> Option<usize>{
+    pub fn rank_1(&self, i: usize) -> Option<usize>{
         if (i >= self.bitvector.len() as usize) || (i == 0) {
             None
         }
@@ -177,14 +177,14 @@ impl RangeMinMaxTree {
 
     }
 
-    fn rank_0(&self, i: usize) -> Option<usize>{
+    pub fn rank_0(&self, i: usize) -> Option<usize>{
         match self.rank_1(i) {
             None => None,
             Some(n) => Some (i-n),
         }
     }
 
-    fn select_1(&self, k: usize) -> Option<usize>{
+    pub fn select_1(&self, k: usize) -> Option<usize>{
             if k < 1 || k >= (self.bitvector.len()/2) as usize {
                 None
             }
@@ -227,7 +227,7 @@ impl RangeMinMaxTree {
         }
     }
 
-    fn select_0(&self, k: usize) -> Option<usize>{
+    pub fn select_0(&self, k: usize) -> Option<usize>{
         if k < 1 || k >= (self.bitvector.len()/2) as usize {
             None
         }
@@ -242,11 +242,8 @@ impl RangeMinMaxTree {
             let mut select = 0;
             let mut tmp = 0;
             let mut j = startbit;
-            println!("j {:?}", j);
             while j <= (startbit + (self.blocksize-1)) {
                 select +=1;
-                println!("j {:?}", j);
-                println!("select {:?}", select);
                 if !self.bitvector[j as u64] {
                     tmp += 1;
                     if tmp == k {
@@ -255,20 +252,14 @@ impl RangeMinMaxTree {
                 }
                 j +=1;
             }
-            println!("select {:?}", select);
             select
         }
         else if (self.tree[2*node+1].count_bits as i64 - (self.tree[2*node+1].count_bits as i64 + self.tree[2*node+1].excess)/2) >= k as i64{
-            println!("stuff {:?}", self.tree[2*node+1].count_bits as i64 - (self.tree[2*node+1].count_bits as i64 + self.tree[2*node+1].excess)/2);
-            println!("elseif node {:?}", 2*node+1);
+
             self.select_0_from_tree(k, 2*node+1)
         }
         else {
-            println!("k {:?}", k);
-            println!("node {:?}", 2*node+1);
-            println!("bitslc{:?}", self.tree[2*node+1 as usize].count_bits);
-            println!("1lc{:?}", (self.tree[2*node+1 as usize].count_bits as i64 +
-                self.tree[2*node+1 as usize].excess)/2);
+
             let temp = k as i64 -
                 (self.tree[2*node+1 as usize].count_bits as i64 -
                     (self.tree[2*node+1 as usize].count_bits as i64 +
@@ -279,12 +270,82 @@ impl RangeMinMaxTree {
         }
     }
 
-    fn fwdsearch(&self, i: usize, d: i64) -> Option<usize>{
-        unimplemented!();
+    pub fn fwdsearch(&self, mut i: usize, mut d: i64) -> Option<usize>{
+        if i<=0 || i >= self.bitvector.len() as usize{
+            None
+        }
+        else {
+            i -=1;
+            let mut pos = i;
+            let k = match i%self.blocksize {
+                    0 => i / self.blocksize,
+                    _ => i / self.blocksize +1,
+            };
+            for j in (i+1) .. (k*self.blocksize) {
+                if self.bitvector[j as u64] {
+                    d -= 1;
+                }
+                else {
+                    d +=1;
+                }
+                if d == 0 {
+                    return Some(j)
+                }
+            }
 
+            let mut node = (self.tree.len()/2 + k -1) as usize;
+            return self.step2(node, i, d);
+        }
     }
 
-    fn bwdsearch(&self, i: usize, d: i64) -> Option<usize>{
+    fn step2(&self, mut node: usize, i: usize, mut d: i64) -> Option<usize> {
+        if node <= 0 {
+            None
+        }
+        else if node % 2 == 0{
+            self.step2((node-1)/2, i, d)
+        }
+        else {
+            let mut right = node +1;
+            if (self.tree[right].min_excess <= d) && (d <= self.tree[right].max_excess) {
+                self.step3(right, i, d)
+            }
+            else {
+                d = d - self.tree[right].excess;
+                self.step2((node-1)/2, i, d)
+            }
+
+        }
+    }
+
+    fn step3(&self, mut node: usize, i: usize, mut d: i64) -> Option<usize> {
+        if node >= (self.tree.len()/2) as usize{
+            let mut pos = (node - self.tree.len()/2)*self.blocksize;
+            while d != 0 {
+                if self.bitvector[pos as u64] {
+                    d -= 1;
+                }
+                else {
+                    d += 1;
+                }
+                pos+=1;
+            }
+            Some(pos)
+        }
+        else {
+            let lc = 2*node +1;
+            let rc = 2*node +2;
+            if (self.tree[lc].min_excess <= d) && (d <= self.tree[lc].max_excess) {
+                self.step3(lc, i, d)
+            }
+            else {
+                d = d - self.tree[lc].excess;
+                self.step3(rc, i, d)
+            }
+        }
+    }
+
+    pub fn bwdsearch(&self, i: usize, d: i64) -> Option<usize>{
         unimplemented!();
     }
 }
