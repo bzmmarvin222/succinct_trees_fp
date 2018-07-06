@@ -103,6 +103,7 @@ impl SuccinctTree<usize> for BalancedParentheses {
 
     fn parent(&self, x : usize) -> Option<usize> {
         //TODO: real impl
+        //bwdsearch(x,−2)+
         Some(5)
     }
 
