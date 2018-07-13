@@ -344,7 +344,6 @@ impl RangeMinMaxTree {
     }
     pub fn bwdsearch(&self, mut i: usize, mut d: i64) -> Option<usize>{
         if i<=0 || i > self.bitvector.len() as usize{
-            println!("hallo {:?}", i);
             None
         }
         else {
@@ -372,7 +371,6 @@ impl RangeMinMaxTree {
 
     fn bstep2(&self, mut node: usize, i: usize, mut d: i64) -> Option<usize> {
         if node <= 0 {
-            println!("test");
             None
         }
         else if node % 2 == 1{
@@ -388,9 +386,6 @@ impl RangeMinMaxTree {
                 tmp = 1;
             }
             if (self.tree[left].min_excess- self.tree[left].excess + tmp <= d) && (d <= self.tree[left].max_excess - self.tree[left].excess +tmp) {
-                println!("left {:?}", left);
-                println!("i {:?}", i);
-                println!("d {:?}", d);
                 self.bstep3(left, i, d)
             }
             else {
@@ -403,13 +398,9 @@ impl RangeMinMaxTree {
 
     fn bstep3(&self, mut node: usize, i: usize, mut d: i64) -> Option<usize> {
         if node >= (self.tree.len()/2) as usize{
-            println!("node {:?}", node);
             let mut pos = (node - self.tree.len()/2)*self.blocksize + self.blocksize-1;
 
             while d != 0 {
-                println!("pos {:?}", pos);
-                println!("i {:?}", i);
-                println!("d {:?}", d);
                 if self.bitvector[pos as u64] {
                     d += 1;
                 }
@@ -423,8 +414,6 @@ impl RangeMinMaxTree {
         else {
             let lc = 2*node +1;
             let rc = 2*node +2;
-            println!("lc {:?}", lc);
-            println!("rc {:?}", rc);
             let mut tmp = 0;
             if self.bitvector[i as u64] {
                 tmp = -1;
