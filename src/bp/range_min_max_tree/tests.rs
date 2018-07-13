@@ -279,6 +279,18 @@ fn valid_bwdsearch() {
 }
 
 #[test]
+fn valid_bwdsearch2() {
+    let bitvec = bit_vec![true, true, true, false,
+                        true, false, true, true,
+                        false, false, false, true,
+                        false, true, true, true,
+                        false, true, false, false,
+                        false, false];
+    let tree = RangeMinMaxTree::new(bitvec, 4);
+    assert_eq!(tree.bwdsearch(4,1).unwrap(), 3);
+}
+
+#[test]
 fn invalid_bwdsearch_i() {
     let bitvec = bit_vec![true, true, true, false,
                         true, false, true, true,

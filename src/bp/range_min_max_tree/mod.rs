@@ -2,15 +2,28 @@ extern crate bv;
 use self::bv::BitVec;
 use std::cmp;
 
+/// Nodes that are being stored in the rangeMinMaxTree
+/// each Field value corresponds to the part of the bitvector
+/// covered by the respective rmm_Node
 #[derive(Serialize, Deserialize, Default, Debug, PartialEq)]
 pub struct rmm_Node {
+    /// the amount of opening paranthesis covered that are not closed by closing paranthesis
     pub excess:  i64,
+    /// minimum amount of excess covered
     pub min_excess: i64,
+    /// maximum amount of excess covered
     pub max_excess: i64,
+    /// count of bits covered
     pub count_bits: u64,
 }
 
+
 impl rmm_Node {
+    ///creates a dummy rmm_Node, covering 0 bits/paranthesis
+    ///therefore its excess is and covered bits are 0
+    ///min and max excess are filled with standard values:
+    ///min_value() for max_excess; max_value for min_excess, so that
+    ///these value will never be the maximum or minimum in any calculation
     pub fn new() -> rmm_Node{
         rmm_Node {
             excess : 0,
@@ -23,6 +36,11 @@ impl rmm_Node {
 }
 
 #[derive(Serialize, Deserialize, PartialEq, Debug, Default)]
+///The RangeMinMaxTree is a struct containing the bitvector to be navigated using the RangeMinMaxTree
+///also the blocksize is contained and can be chosen accordingly
+///the tree itself will always a be a complete binary tree, therefore
+///the tree is stored as a vector of rmm_Nodes and navigation through that tree will be done like
+///navigation through a heap
 pub struct RangeMinMaxTree {
     blocksize: usize,
     tree: Vec<rmm_Node>,
@@ -30,6 +48,21 @@ pub struct RangeMinMaxTree {
 }
 
 impl RangeMinMaxTree {
+    /// Creates a RangeMinMaxTree corresponding to the given bitvector with the given blocksize
+    ///
+    /// # Arguments
+    ///
+    /// * `bitvector` - The bitvector representing the BP String
+    /// * `blocksize` - The chosen size of one block as usize
+    ///
+    ///
+    /// # Returnvalue
+    ///
+    /// returns a RangeMinMaxTree corresponding to the given Arguments
+    ///
+    /// # Example
+    ///
+    /// ...
     pub fn new(bitvector: BitVec, blocksize: usize) -> RangeMinMaxTree {
         RangeMinMaxTree {
             blocksize,
@@ -38,6 +71,14 @@ impl RangeMinMaxTree {
         }
     }
 
+
+    /// Helping method called by new. Returns a vector containing rmm_Nodes, representing the tree
+    ///
+    /// # Arguments
+    ///
+    /// * `bitvector` - The bitvector representing the BP String
+    /// * `blocksize` - The chosen size of one block as usize
+    ///
     fn build_from_bv(bitvector: &BitVec, blocksize: usize) -> Vec<rmm_Node> {
 
         let blocksize = blocksize as u64;
@@ -144,6 +185,13 @@ impl RangeMinMaxTree {
          heap
     }
 
+    /// Calculates rank_1 of the bitvector at the given position
+    ///
+    /// # Arguments
+    ///
+    /// * `i` - Position at which rank_1 is to be calculated
+    ///
+
     pub fn rank_1(&self, i: usize) -> Option<usize>{
         if (i >= self.bitvector.len() as usize) || (i == 0) {
             None
@@ -175,7 +223,12 @@ impl RangeMinMaxTree {
         }
 
     }
-
+    /// Calculates rank_0 of the bitvector at the given position
+    ///
+    /// # Arguments
+    ///
+    /// * `i` - Position at which rank_0 is to be calculated
+    ///
     pub fn rank_0(&self, i: usize) -> Option<usize>{
         match self.rank_1(i) {
             None => None,
@@ -183,6 +236,12 @@ impl RangeMinMaxTree {
         }
     }
 
+    /// Calculates select_1 of the bitvector
+    ///
+    /// # Arguments
+    ///
+    /// * `i` - Value for which the position is to be calculated
+    ///
     pub fn select_1(&self, k: usize) -> Option<usize>{
             if k < 1 || k >= (self.bitvector.len()/2) as usize {
                 None
@@ -193,6 +252,7 @@ impl RangeMinMaxTree {
 
     }
 
+    /// Recursive helping method called by select_1
     fn select_1_from_tree(&self, k:usize, node: usize) -> usize{
         if node >= (self.tree.len()/2) {
             let startbit = (node - self.tree.len()/2) * self.blocksize;
@@ -224,6 +284,12 @@ impl RangeMinMaxTree {
         }
     }
 
+    /// Calculates select_0 of the bitvector
+    ///
+    /// # Arguments
+    ///
+    /// * `i` - Value for which the position is to be calculated
+    ///
     pub fn select_0(&self, k: usize) -> Option<usize>{
         if k < 1 || k >= (self.bitvector.len()/2) as usize {
             None
@@ -233,6 +299,7 @@ impl RangeMinMaxTree {
         }
     }
 
+    /// Recursive helping method called by select_0
     fn select_0_from_tree(&self, k:usize, node: usize) -> usize{
         if node >= (self.tree.len()/2) {
             let startbit = (node - self.tree.len()/2) * self.blocksize;
@@ -350,8 +417,10 @@ impl RangeMinMaxTree {
                     0 => i / self.blocksize,
                     _ => i / self.blocksize +1,
             };
-            let mut j = i-1;
-            while j > ((k-1)*self.blocksize)  {
+            let mut j = i-2;
+            println!("j {:?}", j);
+            print!("end {:?}", ((k-1)*self.blocksize));
+            while j >= ((k-1)*self.blocksize)  {
                 if self.bitvector[j as u64] {
                     d -= 1;
                 }
@@ -359,7 +428,7 @@ impl RangeMinMaxTree {
                     d +=1;
                 }
                 if d == 0 {
-                    return Some(j)
+                    return Some(j+1)
                 }
                 j -= 1;
             }
