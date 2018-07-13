@@ -265,3 +265,39 @@ fn invalid_fwdsearch_d() {
     let tree = RangeMinMaxTree::new(bitvec, 4);
     assert_eq!(tree.fwdsearch(6,i64::min_value()/2), None);
 }
+
+#[test]
+fn valid_bwdsearch() {
+    let bitvec = bit_vec![true, true, true, false,
+                        true, false, true, true,
+                        false, false, false, true,
+                        false, true, true, true,
+                        false, true, false, false,
+                        false, false];
+    let tree = RangeMinMaxTree::new(bitvec, 4);
+    assert_eq!(tree.bwdsearch(17,-2).unwrap(), 14);
+}
+
+#[test]
+fn invalid_bwdsearch_i() {
+    let bitvec = bit_vec![true, true, true, false,
+                        true, false, true, true,
+                        false, false, false, true,
+                        false, true, true, true,
+                        false, true, false, false,
+                        false, false];
+    let tree = RangeMinMaxTree::new(bitvec, 4);
+    assert_eq!(tree.bwdsearch(90,-2), None);
+}
+
+#[test]
+fn invalid_bwdsearch_d() {
+    let bitvec = bit_vec![true, true, true, false,
+                        true, false, true, true,
+                        false, false, false, true,
+                        false, true, true, true,
+                        false, true, false, false,
+                        false, false];
+    let tree = RangeMinMaxTree::new(bitvec, 4);
+    assert_eq!(tree.bwdsearch(6,i64::min_value()/2), None);
+}

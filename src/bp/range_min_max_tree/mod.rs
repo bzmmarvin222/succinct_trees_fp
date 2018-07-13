@@ -218,9 +218,7 @@ impl RangeMinMaxTree {
             let temp = k as i64 - (self.tree[2 * node + 1 as usize].count_bits as i64 +
           self.tree[2 * node + 1 as usize].excess as i64) / 2 as i64;
             assert!( temp >= 0);
-            //println!("bits left{:?}", self.tree[2*node+1 as usize].count_bits as usize);
-            //println!("to add{:?}", self.select_1_from_tree(temp as usize,
-//            2 * node + 2 as usize));
+
             self.tree[2*node+1 as usize].count_bits as usize + self.select_1_from_tree(temp as usize,
             2 * node + 2 as usize)
         }
@@ -343,22 +341,18 @@ impl RangeMinMaxTree {
             }
         }
     }
-
-    pub fn bwdsearch(&self, i: usize, d: i64) -> Option<usize>{
-        unimplemented!();
     pub fn bwdsearch(&self, mut i: usize, mut d: i64) -> Option<usize>{
-        if i<=0 || i >= self.bitvector.len() as usize{
+        if i<=0 || i > self.bitvector.len() as usize{
+            println!("hallo {:?}", i);
             None
         }
         else {
-            i -=1;
-            let mut pos = i;
             let k = match i%self.blocksize {
                     0 => i / self.blocksize,
                     _ => i / self.blocksize +1,
             };
-            let j = i-1;
-            while j >= k*self.blocksize -(self.blocksize-1) {
+            let mut j = i-1;
+            while j > ((k-1)*self.blocksize)  {
                 if self.bitvector[j as u64] {
                     d -= 1;
                 }
@@ -370,7 +364,6 @@ impl RangeMinMaxTree {
                 }
                 j -= 1;
             }
-
             let mut node = (self.tree.len()/2 + k -1) as usize;
             return self.bstep2(node, i, d);
         }
@@ -378,10 +371,11 @@ impl RangeMinMaxTree {
 
     fn bstep2(&self, mut node: usize, i: usize, mut d: i64) -> Option<usize> {
         if node <= 0 {
+            println!("test");
             None
         }
         else if node % 2 == 1{
-            self.step2((node-1)/2, i, d)
+            self.bstep2((node-1)/2, i, d)
         }
         else {
             let mut left = node -1;
@@ -393,6 +387,9 @@ impl RangeMinMaxTree {
                 tmp = 1;
             }
             if (self.tree[left].min_excess- self.tree[left].excess + tmp <= d) && (d <= self.tree[left].max_excess - self.tree[left].excess +tmp) {
+                println!("left {:?}", left);
+                println!("i {:?}", i);
+                println!("d {:?}", d);
                 self.bstep3(left, i, d)
             }
             else {
@@ -405,21 +402,28 @@ impl RangeMinMaxTree {
 
     fn bstep3(&self, mut node: usize, i: usize, mut d: i64) -> Option<usize> {
         if node >= (self.tree.len()/2) as usize{
-            let mut pos = (node - self.tree.len()/2)*self.blocksize;
+            println!("node {:?}", node);
+            let mut pos = (node - self.tree.len()/2)*self.blocksize + self.blocksize-1;
+
             while d != 0 {
+                println!("pos {:?}", pos);
+                println!("i {:?}", i);
+                println!("d {:?}", d);
                 if self.bitvector[pos as u64] {
-                    d -= 1;
-                }
-                else {
                     d += 1;
                 }
-                pos+=1;
+                else {
+                    d -= 1;
+                }
+                pos-=1;
             }
-            Some(pos)
+            Some(pos+1)
         }
         else {
             let lc = 2*node +1;
             let rc = 2*node +2;
+            println!("lc {:?}", lc);
+            println!("rc {:?}", rc);
             let mut tmp = 0;
             if self.bitvector[i as u64] {
                 tmp = -1;
@@ -428,11 +432,11 @@ impl RangeMinMaxTree {
                 tmp = 1;
             }
             if (self.tree[rc].min_excess - self.tree[rc].excess + tmp <= d) && (d <= self.tree[rc].max_excess - self.tree[rc].excess + tmp ) {
-                self.bstep3(lc, i, d)
+                self.bstep3(rc, i, d)
             }
             else {
                 d = d - self.tree[rc].excess;
-                self.bstep3(rc, i, d)
+                self.bstep3(lc, i, d)
             }
         }
     }
