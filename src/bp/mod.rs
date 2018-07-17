@@ -29,7 +29,7 @@ impl BalancedParentheses {
         Some(5)
     }
 
-    fn from_braces_representation(braces: String) -> Self {
+    pub fn from_braces_representation(braces: String) -> Self {
         let mut vect = BitVec::new();
         for brace in braces.chars() {
             if brace == '(' {
@@ -43,7 +43,7 @@ impl BalancedParentheses {
         Self::new(vect)
     }
 
-    fn braces_representation(&self) -> String {
+    pub fn braces_representation(&self) -> String {
         let vec = &self.vec();
         let mut result = String::new();
 

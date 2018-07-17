@@ -1,17 +1,18 @@
+#![feature(test)]
+
+extern crate test;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;
 extern crate bv;
 extern crate bincode;
 
+use bincode::serialize;
+use bincode::deserialize;
 use bv::BitVec;
 
 mod bp;
-
 mod louds;
-
-use bincode::serialize;
-use bincode::deserialize;
 
 trait SuccinctTree<T>: Sized {
     fn new(vec: BitVec<T>) -> Self;
@@ -41,5 +42,15 @@ trait SuccinctTree<T>: Sized {
 
 #[cfg(test)]
 mod tests {
+    use test::Bencher;
+    use super::*;
+    use louds::LOUDS;
+    use bp::BalancedParentheses;
 
+    #[bench]
+    fn bench_add_two(b: &mut Bencher) {
+        let braces = String::from("((())(())()()(()())");
+        let bp = BalancedParentheses::from_braces_representation(braces);
+        b.iter(|| bp.subtree_size(0));
+    }
 }
