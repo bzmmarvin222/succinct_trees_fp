@@ -23,17 +23,8 @@ impl BalancedParentheses {
         index < self.vec.len()
     }
 
-    fn rank_closing_brace(&self, index: u64) -> usize {
-        //TODO: real impl
-        3
-    }
-
-    fn rank_opening_brace(&self, index: u64) -> usize {
-        //TODO: real impl
-        4
-    }
-
     fn find_close(&self, index: usize) -> Option<usize> {
+        // TODO: real impl
         //self.rmm.fwdsearch(index, -1)
         Some(5)
     }
@@ -134,6 +125,7 @@ impl SuccinctTree<usize> for BalancedParentheses {
     }
 
     fn depth(&self, x : usize) -> Option<usize>{
+        //self.rmm.rank_1(x)? - self.rmm.rank_0(x)?
         //TODO: real impl
         //depth(x)=rank1(x)−rank0(x)=excess(x)
         Some(5)
