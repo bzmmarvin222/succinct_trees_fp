@@ -19,11 +19,11 @@ pub struct BalancedParentheses {
 
 impl BalancedParentheses {
 
-    fn has_index(&self, index: usize) -> bool {
+    fn has_index(&self, index: u64) -> bool {
         index < self.vec.len()
     }
 
-    fn find_close(&self, index: usize) -> Option<usize> {
+    fn find_close(&self, index: u64) -> Option<u64> {
         // TODO: real impl
         //self.rmm.fwdsearch(index, -1)
         Some(5)
@@ -81,31 +81,31 @@ impl SuccinctTree<usize> for BalancedParentheses {
         deserialize(&serialized[..]).unwrap()
     }
 
-    fn index_represents_node(&self, x : usize) -> bool {
+    fn index_represents_node(&self, x : u64) -> bool {
         self.vec[x]
     }
 
-    fn is_leaf(&self, x : usize) -> Option<bool>{
+    fn is_leaf(&self, x : u64) -> Option<bool>{
         if !self.has_index(x + 1) {
             return None;
         }
         Some(self.vec[x] && !self.vec[x+1])
     }
 
-    fn parent(&self, x : usize) -> Option<usize> {
+    fn parent(&self, x : u64) -> Option<u64> {
         //TODO: real impl
         //bwdsearch(x,−2)+
         Some(5)
     }
 
-    fn first_child(&self, x : usize) -> Option<usize>{
+    fn first_child(&self, x : u64) -> Option<u64>{
         if !self.index_represents_node(x) || !self.vec[x + 1]{
             return None;
         }
         Some(x + 1)
     }
 
-    fn next_sibling(&self, x : usize) -> Option<usize>{
+    fn next_sibling(&self, x : u64) -> Option<u64>{
         if !self.index_represents_node(x) {
             return None;
         }
@@ -117,21 +117,21 @@ impl SuccinctTree<usize> for BalancedParentheses {
         None
     }
 
-    fn ancestor(&self, x : usize, y : usize) -> Option<bool>{
+    fn ancestor(&self, x : u64, y : u64) -> Option<bool>{
         if !self.has_index(x) || !self.has_index(y) {
             return None;
         }
         Option::from(x <= y && self.find_close(x)? > y)
     }
 
-    fn depth(&self, x : usize) -> Option<usize>{
+    fn depth(&self, x : u64) -> Option<u64>{
         //self.rmm.rank_1(x)? - self.rmm.rank_0(x)?
         //TODO: real impl
         //depth(x)=rank1(x)−rank0(x)=excess(x)
         Some(5)
     }
 
-    fn subtree_size(&self, x : usize) -> Option<usize>{
+    fn subtree_size(&self, x : u64) -> Option<u64>{
         if !self.index_represents_node(x) {
             return None;
         }
@@ -140,17 +140,17 @@ impl SuccinctTree<usize> for BalancedParentheses {
 
     //these functions need more than constant time
     //to be implemented
-    fn child(&self, x : usize, i : usize) -> Option<usize>{
+    fn child(&self, x : u64, i : u64) -> Option<u64>{
         //TODO: real impl
         Some(5)
     }
 
-    fn degree(&self, x : usize) -> Option<usize>{
+    fn degree(&self, x : u64) -> Option<u64>{
         //TODO: real impl
         Some(5)
     }
 
-    fn child_rank(&self, x : usize) -> Option<usize>{
+    fn child_rank(&self, x : u64) -> Option<u64>{
         //TODO: real impl
         Some(5)
     }
