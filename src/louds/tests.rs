@@ -36,18 +36,15 @@ fn test_binary_representation() {
 #[test]
 fn test_prev_0(){
     let louds1 = LOUDS::from_binary_representation(String::from("111101010000"));
-    assert_eq!(louds1.prev_0(4),4);
-    assert_eq!(louds1.prev_0(7),6);
-    //    prev0(4)=select0(rank0(4))
-    //    rank0(4)=1
-    //    select0(1)=4
+    assert_eq!(louds1.prev_0(4),Some(4));
+    assert_eq!(louds1.prev_0(7),Some(6));
 }
 
 #[test]
 fn test_next_0(){
     let louds1 = LOUDS::from_binary_representation(String::from("111101010000"));
-    assert_eq!(louds1.next_0(8),9);
-    assert_eq!(louds1.next_0(2),4);
+    assert_eq!(louds1.next_0(8),Some(9));
+    assert_eq!(louds1.next_0(2),Some(4));
 }
 
 #[test]
@@ -65,17 +62,17 @@ fn test_index_represents_node(){
 #[test]
 fn test_is_leaf(){
     let louds1 = LOUDS::from_binary_representation(String::from("111101010000"));
-    assert_eq!(louds1.is_leaf(1),false);
-    assert_eq!(louds1.is_leaf(10),true);
+    assert_eq!(louds1.is_leaf(1),Some(false));
+    assert_eq!(louds1.is_leaf(10),Some(true));
 }
 
 #[test]
 fn test_child_rank(){
     let louds1 = LOUDS::from_binary_representation(String::from("111101010000"));
-    assert_eq!(louds1.child_rank(1),0);
-    assert_eq!(louds1.child_rank(9),2);
-    assert_eq!(louds1.child_rank(10),0);
-    assert_eq!(louds1.child_rank(7),1);
+    assert_eq!(louds1.child_rank(1),Some(0));
+    assert_eq!(louds1.child_rank(9),Some(2));
+    assert_eq!(louds1.child_rank(10),Some(0));
+    assert_eq!(louds1.child_rank(7),Some(1));
 }
 
 #[test]
