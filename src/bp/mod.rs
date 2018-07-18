@@ -24,9 +24,14 @@ impl BalancedParentheses {
     }
 
     fn find_close(&self, index: u64) -> Option<u64> {
-        // TODO: real impl
-        //self.rmm.fwdsearch(index, -1)
-        Some(5)
+        if !self.index_represents_node(index) {
+            return None;
+        }
+        let result = self.rmm.fwdsearch((index + 1) as usize, -1);
+        if let Some(res) = result {
+            return Some(res as u64);
+        }
+        None
     }
 
     pub fn from_braces_representation(braces: String) -> Self {
@@ -86,27 +91,32 @@ impl SuccinctTree<usize> for BalancedParentheses {
     }
 
     fn is_leaf(&self, x : u64) -> Option<bool>{
-        if !self.has_index(x + 1) {
+        if !self.has_index(x + 1) || !self.index_represents_node(x) {
             return None;
         }
-        Some(self.vec[x] && !self.vec[x+1])
+        Some(!self.vec[x+1])
     }
 
     fn parent(&self, x : u64) -> Option<u64> {
-        //TODO: real impl
-        //bwdsearch(x,−2)+
-        Some(5)
+        if !self.has_index(x) || !self.index_represents_node(x) {
+            return None;
+        }
+        let result = self.rmm.bwdsearch(x as usize, -2);
+        if let Some(res) = result {
+            return Some(res as u64);
+        }
+        None
     }
 
     fn first_child(&self, x : u64) -> Option<u64>{
-        if !self.index_represents_node(x) || !self.vec[x + 1]{
+        if !self.has_index(x) || !self.index_represents_node(x) || !self.vec[x + 1]{
             return None;
         }
         Some(x + 1)
     }
 
     fn next_sibling(&self, x : u64) -> Option<u64>{
-        if !self.index_represents_node(x) {
+        if !self.has_index(x) || !self.index_represents_node(x) {
             return None;
         }
         if let Some(index) = self.find_close(x) {
@@ -118,21 +128,23 @@ impl SuccinctTree<usize> for BalancedParentheses {
     }
 
     fn ancestor(&self, x : u64, y : u64) -> Option<bool>{
-        if !self.has_index(x) || !self.has_index(y) {
+        if !self.has_index(x) || !self.has_index(y) || !self.index_represents_node(x) {
             return None;
         }
         Option::from(x <= y && self.find_close(x)? > y)
     }
 
     fn depth(&self, x : u64) -> Option<u64>{
-        //self.rmm.rank_1(x)? - self.rmm.rank_0(x)?
-        //TODO: real impl
-        //depth(x)=rank1(x)−rank0(x)=excess(x)
-        Some(5)
+        if !self.has_index(x) || !self.index_represents_node(x) {
+            return None;
+        } else if x == 0 {
+            return Some(0);
+        }
+        Option::from((self.rmm.rank_1((x) as usize)? - self.rmm.rank_0((x) as usize)?) as u64)
     }
 
     fn subtree_size(&self, x : u64) -> Option<u64>{
-        if !self.index_represents_node(x) {
+        if !self.has_index(x) || !self.index_represents_node(x) {
             return None;
         }
         Option::from((self.find_close(x)? - x + 1) / 2)
@@ -141,13 +153,51 @@ impl SuccinctTree<usize> for BalancedParentheses {
     //these functions need more than constant time
     //to be implemented
     fn child(&self, x : u64, i : u64) -> Option<u64>{
-        //TODO: real impl
-        Some(5)
+        if !self.has_index(x) || !self.index_represents_node(x) {
+            return None;
+        }
+
+        let index_close = self.find_close(x)?;
+        let mut current_depth = 0;
+        let mut already_found_children = 0;
+
+        for index in x..index_close {
+            let is_node = self.vec[index];
+            if is_node {
+                if already_found_children == i {
+                    return Some(index);
+                } else if current_depth == 0 {
+                    already_found_children += 1;
+                }
+                current_depth += 1;
+            } else {
+                current_depth -= 1;
+            }
+        }
+        None
     }
 
     fn degree(&self, x : u64) -> Option<u64>{
-        //TODO: real impl
-        Some(5)
+        if !self.has_index(x) || !self.index_represents_node(x) {
+            return None;
+        }
+
+        let index_close = self.find_close(x)?;
+        let mut current_depth = 0;
+        let mut current_degree = 0;
+
+        for index in x..index_close {
+            let is_node = self.vec[index];
+            if is_node {
+                if current_depth == 0 {
+                    current_degree += 1;
+                }
+                current_depth += 1;
+            } else {
+                current_depth -= 1;
+            }
+        }
+        Some(current_degree)
     }
 
     fn child_rank(&self, x : u64) -> Option<u64>{

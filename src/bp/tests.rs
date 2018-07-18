@@ -80,8 +80,10 @@ fn test_first_child() {
 #[test]
 fn test_find_close() {
     let bp = BalancedParentheses::from_braces_representation(String::from("((()())())"));
+    assert_eq!(Some(9), bp.find_close(0));
     assert_eq!(Some(3), bp.find_close(2));
-    assert_eq!(Some(2), bp.find_close(3));
+    assert_eq!(Some(5), bp.find_close(4));
+    assert_eq!(Some(8), bp.find_close(7));
     assert_eq!(None, bp.find_close(30));
 }
 
@@ -120,22 +122,28 @@ fn test_subtree_size() {
 #[test]
 fn test_depth() {
     let bp = BalancedParentheses::from_braces_representation(String::from("((()())())"));
-    //TODO: real test
-    assert_eq!(true, false);
+    assert_eq!(Some(0), bp.depth(0));
+    assert_eq!(Some(1), bp.depth(1));
+    assert_eq!(Some(2), bp.depth(2));
+    assert_eq!(Some(2), bp.depth(4));
 }
 
 #[test]
 fn test_child() {
     let bp = BalancedParentheses::from_braces_representation(String::from("((()())())"));
-    //TODO: real test
-    assert_eq!(true, false);
+    assert_eq!(Some(1), bp.child(0, 0));
+    assert_eq!(Some(7), bp.child(0, 1));
+    assert_eq!(None, bp.child(30, 0));
+    assert_eq!(None, bp.child(0, 4));
 }
 
 #[test]
 fn test_degree() {
     let bp = BalancedParentheses::from_braces_representation(String::from("((()())())"));
-    //TODO: real test
-    assert_eq!(true, false);
+    assert_eq!(Some(2), bp.degree(0));
+    assert_eq!(Some(2), bp.degree(1));
+    assert_eq!(Some(0), bp.degree(2));
+    assert_eq!(None, bp.degree(30));
 }
 
 #[test]
