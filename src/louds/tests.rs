@@ -3,9 +3,6 @@ use super::bv::*;
 
 //serialize deserialize test
 
-
-// parenthesis sequence form test
-
 #[test]
 fn test_from_binary_representation() {
     let louds = LOUDS::from_binary_representation(String::from("10"));
@@ -16,6 +13,7 @@ fn test_from_binary_representation() {
     let expected_vec = bit_vec![true, true, true, false, true, false, false, true, false, false];
     assert_eq!(louds.vec, expected_vec);
 }
+
 #[test]
 #[should_panic]
 fn test_from_binary_representation_panic() {
@@ -98,7 +96,13 @@ fn test_parent(){
 }
 
 #[test]
-fn test_child(){}
+fn test_child(){
+    let louds = LOUDS::from_binary_representation(String::from("111101010000"));
+    assert_eq!(Some(9), louds.child(1, 2));
+    assert_eq!(Some(5), louds.child(1, 0));
+    assert_eq!(Some(7), louds.child(1, 1));
+    assert_eq!(Some(11), louds.child(7, 0));
+}
 
 #[test]
 fn test_first_child(){}

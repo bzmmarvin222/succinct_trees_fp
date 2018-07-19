@@ -239,7 +239,7 @@ impl SuccinctTree<u8> for LOUDS {
         {
             match self.rank_select_structure.rank_1(x) {
                 Some(rank1_x) => {
-                    match self.rank_select_structure.select_0(rank1_x + i) {
+                    match self.rank_select_structure.select_0(rank1_x + i - 1) {
                         Some(select0_rank1_x_i) => {
                             let result = select0_rank1_x_i + 1;
                             Some(result)
