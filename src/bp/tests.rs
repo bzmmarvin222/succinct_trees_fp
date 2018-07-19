@@ -158,6 +158,7 @@ fn test_degree() {
 #[test]
 fn test_child_rank() {
     let bp = BalancedParentheses::from_braces_representation(String::from("((()())())"));
-    //TODO: real test
-    assert_eq!(true, false);
+    assert_eq!(Some(0), bp.child_rank(2));
+    assert_eq!(Some(1), bp.child_rank(4));
+    assert_eq!(None, bp.child_rank(0));
 }

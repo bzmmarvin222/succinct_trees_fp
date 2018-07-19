@@ -201,8 +201,28 @@ impl SuccinctTree<usize> for BalancedParentheses {
     }
 
     fn child_rank(&self, x : u64) -> Option<u64>{
-        //TODO: real impl
-        Some(5)
+        if !self.has_index(x) || !self.index_represents_node(x) {
+            return None;
+        }
+
+        let mut current_depth = 0;
+        let mut current_rank = 0;
+
+        for index in (0 .. x).rev() {
+            let is_node = self.vec[index];
+            if is_node {
+                if current_depth == 0 {
+                    return Some(current_rank);
+                }
+                current_depth -= 1;
+            } else {
+                if current_depth == 0 {
+                    current_rank += 1;
+                }
+                current_depth += 1;
+            }
+        }
+        None
     }
 
 }
