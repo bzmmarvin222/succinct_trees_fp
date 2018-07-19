@@ -24,12 +24,12 @@ impl BalancedParentheses {
     }
 
     fn find_close(&self, index: u64) -> Option<u64> {
-        //if !self.index_represents_node(index) {
-        //    return None;
-        //}
-        let result = self.rmm.fwdsearch((index) as usize, -1);
+        if !self.index_represents_node(index) {
+            return None;
+        }
+        let result = self.rmm.fwdsearch((index + 1) as usize, -1);
         if let Some(res) = result {
-            return Some(res as u64);
+            return Some((res - 1) as u64);
         }
         None
     }
@@ -87,7 +87,7 @@ impl SuccinctTree<usize> for BalancedParentheses {
     }
 
     fn index_represents_node(&self, x : u64) -> bool {
-        self.vec[x]
+        self.has_index(x) && self.vec[x]
     }
 
     fn is_leaf(&self, x : u64) -> Option<bool>{
@@ -101,9 +101,9 @@ impl SuccinctTree<usize> for BalancedParentheses {
         if !self.has_index(x) || !self.index_represents_node(x) {
             return None;
         }
-        let result = self.rmm.bwdsearch(x as usize, -2);
+        let result = self.rmm.bwdsearch((x + 1) as usize, -2);
         if let Some(res) = result {
-            return Some(res as u64);
+            return Some((res - 1) as u64);
         }
         None
     }
@@ -121,19 +121,16 @@ impl SuccinctTree<usize> for BalancedParentheses {
         }
         if let Some(index) = self.find_close(x) {
             if self.vec[index + 1] {
-                return Some(index);
+                return Some(index + 1);
             }
         }
         None
     }
 
     fn ancestor(&self, x : u64, y : u64) -> Option<bool>{
-        println!("is node {:?}", self.index_represents_node(x));
         if !self.has_index(x) || !self.has_index(y) || !self.index_represents_node(x) {
             return None;
         }
-        println!("find_close: {:?}", self.find_close(x)?);
-        println!("y {:?}", y);
         Option::from(x <= y && self.find_close(x)? >= y)
     }
 
@@ -164,10 +161,10 @@ impl SuccinctTree<usize> for BalancedParentheses {
         let mut current_depth = 0;
         let mut already_found_children = 0;
 
-        for index in x..index_close {
+        for index in x + 1..index_close {
             let is_node = self.vec[index];
             if is_node {
-                if already_found_children == i {
+                if already_found_children == i && current_depth == 0 {
                     return Some(index);
                 } else if current_depth == 0 {
                     already_found_children += 1;
@@ -189,7 +186,7 @@ impl SuccinctTree<usize> for BalancedParentheses {
         let mut current_depth = 0;
         let mut current_degree = 0;
 
-        for index in x..index_close {
+        for index in x + 1..index_close {
             let is_node = self.vec[index];
             if is_node {
                 if current_depth == 0 {

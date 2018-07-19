@@ -80,18 +80,19 @@ fn test_first_child() {
 #[test]
 fn test_find_close() {
     let bp = BalancedParentheses::from_braces_representation(String::from("((()())())"));
-    //assert_eq!(Some(10), bp.find_close(1));
-    assert_eq!(Some(4), bp.find_close(3));
-    assert_eq!(Some(6), bp.find_close(5));
-    assert_eq!(Some(9), bp.find_close(8));
+    assert_eq!(Some(9), bp.find_close(0));
+    assert_eq!(Some(3), bp.find_close(2));
+    assert_eq!(Some(5), bp.find_close(4));
+    assert_eq!(Some(8), bp.find_close(7));
     assert_eq!(None, bp.find_close(30));
 }
 
 #[test]
 fn test_ancestor() {
     let bp = BalancedParentheses::from_braces_representation(String::from("((()())())"));
+    assert_eq!(Some(true), bp.ancestor(0, 1));
     assert_eq!(Some(true), bp.ancestor(1, 2));
-    assert_eq!(Some(false), bp.ancestor(3, 7));
+    assert_eq!(Some(false), bp.ancestor(1, 7));
     assert_eq!(None, bp.ancestor(1, 20));
 }
 
@@ -106,6 +107,11 @@ fn test_next_sibling() {
 #[test]
 fn test_parent() {
     let bp = BalancedParentheses::from_braces_representation(String::from("((()())())"));
+    println!("test: {:?}", bp.rmm.bwdsearch(1, -2));
+    println!("test: {:?}", bp.rmm.bwdsearch(2, -2));
+    println!("test: {:?}", bp.rmm.bwdsearch(3, -2));
+    println!("test: {:?}", bp.rmm.bwdsearch(4, -2));
+    println!("test: {:?}", bp.rmm.bwdsearch(5, -2));
     assert_eq!(Some(1), bp.parent(4));
     assert_eq!(Some(0), bp.parent(1));
     assert_eq!(None, bp.parent(0));
