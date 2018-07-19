@@ -91,6 +91,9 @@ fn test_degree(){}
 #[test]
 fn test_parent(){
     let louds = LOUDS::from_binary_representation(String::from("111101010000"));
+    assert_eq!(Some(5), louds.parent(10));
+    assert_eq!(Some(7), louds.parent(11));
+    assert_eq!(Some(1), louds.parent(7));
     assert_eq!(Some(1), louds.parent(5));
 }
 

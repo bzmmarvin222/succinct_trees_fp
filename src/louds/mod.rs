@@ -7,6 +7,7 @@ use self::bio::data_structures::rank_select::RankSelect;
 use self::bv::BitVec;
 use self::bincode::{serialize, deserialize};
 use SuccinctTree;
+use std::cmp;
 
 #[derive(Serialize, Deserialize)]
 pub struct LOUDS{
@@ -123,30 +124,15 @@ impl SuccinctTree<u8> for LOUDS {
 
     // parent of node x
     fn parent(&self, x : u64) -> Option<u64> {
-        if self.index_represents_node(x)
-        {
-            match self.rank_select_structure.rank_0(x - 1) {
-                Some(rank0_x) => {
-                    println!("1: {}", rank0_x);
-                    match self.rank_select_structure.select_1(rank0_x) {
-                        Some(select1_rank0_x) => {
-                            println!("2: {}", select1_rank0_x);
-                            match self.prev_0(select1_rank0_x) {
-                                Some(prev_zero_select1_rank0_x) => {
-                                    println!("3: {}", prev_zero_select1_rank0_x );
-                                    let result = prev_zero_select1_rank0_x + 1;
-                                    Some(result)
-                                },
-                                None => {None}
-                            }
-                        },
-                        None => {None}
-                    }
-                },
-                None => {None}
-            }
+        if !self.index_represents_node(x) {
+            return None;
         }
-        else {None}
+
+        let rank_0 = self.rank_select_structure.rank_0(x);
+        let select_1 = self.rank_select_structure.select_1(rank_0?);
+        let normed_select_1 = cmp::max(select_1?, 1);
+        let result = self.prev_0(normed_select_1);
+        Option::from(result? + 1)
     }
 
 
