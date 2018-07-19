@@ -125,7 +125,7 @@ impl RangeMinMaxTree {
                  heap[currentLeaf].max_excess = M;
                  heap[currentLeaf].count_bits = bitcount;
              }
-             else if ((i+1) % blocksize == 0) {
+             else if (i+1) % blocksize == 0 {
                  heap[currentLeaf].excess = e;
                  heap[currentLeaf].min_excess = m;
                  heap[currentLeaf].max_excess = M;

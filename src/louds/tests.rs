@@ -36,26 +36,29 @@ fn test_binary_representation() {
 #[test]
 fn test_prev_0(){
     let louds1 = LOUDS::from_binary_representation(String::from("111101010000"));
-    assert_eq!(louds1.prev_0(4),Some(4));
+    assert_eq!(louds1.prev_0(5),Some(4));
     assert_eq!(louds1.prev_0(7),Some(6));
+    assert_eq!(louds1.prev_0(9),Some(9));
 }
 
 #[test]
 fn test_next_0(){
     let louds1 = LOUDS::from_binary_representation(String::from("111101010000"));
-    assert_eq!(louds1.next_0(8),Some(9));
-    assert_eq!(louds1.next_0(2),Some(4));
+    assert_eq!(louds1.next_0(5),Some(6));
+    assert_eq!(louds1.next_0(7),Some(8));
+    assert_eq!(louds1.prev_0(9),Some(9));
 }
 
 #[test]
 fn test_index_represents_node(){
-    let louds1 = LOUDS::from_binary_representation(String::from("111101010000"));
-    assert_eq!(louds1.index_represents_node(0),false);
-    assert_eq!(louds1.index_represents_node(1),true);
-    assert_eq!(louds1.index_represents_node(4),false);
-    assert_eq!(louds1.index_represents_node(9),true);
-    assert_eq!(louds1.index_represents_node(7),true);
-    assert_eq!(louds1.index_represents_node(8),false);
+    let louds = LOUDS::from_binary_representation(String::from("111101010000"));
+    assert_eq!(louds.index_represents_node(0),false);
+    assert_eq!(louds.index_represents_node(1),true);
+    assert_eq!(louds.index_represents_node(4),false);
+    assert_eq!(louds.index_represents_node(5),true);
+    assert_eq!(louds.index_represents_node(9),true);
+    assert_eq!(louds.index_represents_node(7),true);
+    assert_eq!(louds.index_represents_node(8),false);
 
 }
 
@@ -63,16 +66,18 @@ fn test_index_represents_node(){
 fn test_is_leaf(){
     let louds1 = LOUDS::from_binary_representation(String::from("111101010000"));
     assert_eq!(louds1.is_leaf(1),Some(false));
+    assert_eq!(louds1.is_leaf(8),Some(false));
     assert_eq!(louds1.is_leaf(10),Some(true));
+    assert_eq!(louds1.is_leaf(11),Some(true));
 }
 
 #[test]
 fn test_child_rank(){
-    let louds1 = LOUDS::from_binary_representation(String::from("111101010000"));
-    assert_eq!(louds1.child_rank(1),Some(0));
-    assert_eq!(louds1.child_rank(9),Some(2));
-    assert_eq!(louds1.child_rank(10),Some(0));
-    assert_eq!(louds1.child_rank(7),Some(1));
+    let louds = LOUDS::from_binary_representation(String::from("111101010000"));
+    assert_eq!(louds.child_rank(1),Some(0));
+    assert_eq!(louds.child_rank(9),Some(2));
+    assert_eq!(louds.child_rank(10),Some(0));
+    assert_eq!(louds.child_rank(7),Some(1));
 }
 
 #[test]
@@ -82,7 +87,10 @@ fn test_next_sibling(){}
 fn test_degree(){}
 
 #[test]
-fn test_parent(){}
+fn test_parent(){
+    let louds = LOUDS::from_binary_representation(String::from("111101010000"));
+    assert_eq!(Some(1), louds.parent(5));
+}
 
 #[test]
 fn test_child(){}

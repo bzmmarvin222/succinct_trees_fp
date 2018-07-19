@@ -25,7 +25,7 @@ impl LOUDS {
     //prev returns the 0 of the node before if at index x in rank_select_struckt there is 1
     // prev0 returns x if at index x in rank_select_struckt there is 0
     fn prev_0(&self, x : u64) -> Option<u64> {
-        if (self.index_represents_node(x))
+        if self.index_represents_node(x)
         {
             match self.rank_select_structure.rank_0(x) {
                 Some(rank0_x) => {
@@ -39,7 +39,7 @@ impl LOUDS {
 
     //next_0 returns always the 0 of the node after
     fn next_0(&self, x : u64) -> Option<u64> {
-        if (self.index_represents_node(x))
+        if self.index_represents_node(x)
         {
             match self.rank_select_structure.rank_0(x) {
                 Some(rank0_x) => {
@@ -109,13 +109,7 @@ impl SuccinctTree<u8> for LOUDS {
     //never pass negative numbers as parameters in this class
 
     fn index_represents_node(&self, x : u64) -> bool {
-        if x<1 {
-            false
-        }
-        else{
-            let result = (self.vec[x-1] == false) || (x==1);
-            result
-        }
+        x >= 1 && (!self.vec[x - 1] || x == 1)
     }
 
         // from here x,y are the elements of the sequence, which
@@ -123,13 +117,7 @@ impl SuccinctTree<u8> for LOUDS {
 
     // whether x is a leaf
     fn is_leaf(&self, x : u64) -> Option<bool> {
-        if (self.index_represents_node(x))
-        {
-            let result = (self.vec[x] == false);
-            Some(result)
-        }
-        else
-        {None}
+        Option::from(self.index_represents_node(x) && !self.vec[x])
     }
 
 
@@ -200,12 +188,15 @@ impl SuccinctTree<u8> for LOUDS {
     fn parent(&self, x : u64) -> Option<u64> {
         if self.index_represents_node(x)
         {
-            match self.rank_select_structure.rank_0(x) {
+            match self.rank_select_structure.rank_0(x - 1) {
                 Some(rank0_x) => {
+                    println!("1: {}", rank0_x);
                     match self.rank_select_structure.select_1(rank0_x) {
                         Some(select1_rank0_x) => {
+                            println!("2: {}", select1_rank0_x);
                             match self.prev_0(select1_rank0_x) {
                                 Some(prev_zero_select1_rank0_x) => {
+                                    println!("3: {}", prev_zero_select1_rank0_x );
                                     let result = prev_zero_select1_rank0_x + 1;
                                     Some(result)
                                 },
