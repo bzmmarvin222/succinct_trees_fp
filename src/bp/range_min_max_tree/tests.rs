@@ -319,5 +319,5 @@ fn debug() {
     let bitvec = bit_vec![true, true, true, false, true, false, false, true,
                         false, false];
     let tree = RangeMinMaxTree::new(bitvec, 8);
-    assert_eq!(tree.fwdsearch(1, -1).unwrap(),10);
+    assert_eq!(tree.fwdsearch(3, -1).unwrap(),4);
 }

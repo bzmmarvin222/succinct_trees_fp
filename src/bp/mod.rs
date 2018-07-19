@@ -24,10 +24,10 @@ impl BalancedParentheses {
     }
 
     fn find_close(&self, index: u64) -> Option<u64> {
-        if !self.index_represents_node(index) {
-            return None;
-        }
-        let result = self.rmm.fwdsearch((index + 1) as usize, -1);
+        //if !self.index_represents_node(index) {
+        //    return None;
+        //}
+        let result = self.rmm.fwdsearch((index) as usize, -1);
         if let Some(res) = result {
             return Some(res as u64);
         }
@@ -128,10 +128,13 @@ impl SuccinctTree<usize> for BalancedParentheses {
     }
 
     fn ancestor(&self, x : u64, y : u64) -> Option<bool>{
+        println!("is node {:?}", self.index_represents_node(x));
         if !self.has_index(x) || !self.has_index(y) || !self.index_represents_node(x) {
             return None;
         }
-        Option::from(x <= y && self.find_close(x)? > y)
+        println!("find_close: {:?}", self.find_close(x)?);
+        println!("y {:?}", y);
+        Option::from(x <= y && self.find_close(x)? >= y)
     }
 
     fn depth(&self, x : u64) -> Option<u64>{
