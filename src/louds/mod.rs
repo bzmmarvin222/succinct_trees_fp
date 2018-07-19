@@ -235,22 +235,13 @@ impl SuccinctTree<u8> for LOUDS {
 
     // i-th child of node x
     fn child(&self, x : u64, i : u64) -> Option<u64> {
-        if self.index_represents_node(x)
-        {
-            match self.rank_select_structure.rank_1(x) {
-                Some(rank1_x) => {
-                    match self.rank_select_structure.select_0(rank1_x + i - 1) {
-                        Some(select0_rank1_x_i) => {
-                            let result = select0_rank1_x_i + 1;
-                            Some(result)
-                        },
-                        None => {None}
-                    }
-                },
-                None => {None}
-            }
+        if !self.index_represents_node(x) {
+            return None;
         }
-        else {None}
+
+        let rank_1 = self.rank_select_structure.rank_1(x);
+        let result = self.rank_select_structure.select_0(rank_1? + i - 1);
+        Option::from(result? + 1)
     }
 
     // number of children of node x
