@@ -143,21 +143,15 @@ impl SuccinctTree<u8> for LOUDS {
 
     // next sibling (to the right) of node x
     fn next_sibling(&self, x : u64) -> Option<u64> {
-        if self.index_represents_node(x)
-        {
-            match self.rank_select_structure.rank_0(x - 1) {
-                Some(rank0_x_1) => {
-                    match self.rank_select_structure.select_1(rank0_x_1 + 1) {
-                        Some(select1_rank0_x_1) => {
-                            self.rank_select_structure.select_0(select1_rank0_x_1 + 1)
-                        },
-                        None => {None}
-                    }
-                },
-                None => {None}
-            }
+        if !self.index_represents_node(x) {
+            return None;
         }
-        else {None}
+
+        let rank_0 = self.rank_select_structure.rank_0(x - 1);
+        let select_1 = self.rank_select_structure.select_1(rank_0? + 1);
+        let normed_select_1 = cmp::max(select_1?, 1);
+        let select_0 = self.rank_select_structure.select_0(normed_select_1 + 1);
+        Option::from(select_0? + 1)
     }
 
 
@@ -262,27 +256,17 @@ impl SuccinctTree<u8> for LOUDS {
 
     // number of siblings to the left of node x
     fn child_rank(&self, x : u64) -> Option<u64> {
-        if self.index_represents_node(x)
+        if !self.index_represents_node(x)
         {
-            match self.rank_select_structure.rank_0(x - 1) {
-                Some(rank0_x_1) => {
-                    match self.rank_select_structure.select_1(rank0_x_1) {
-                        Some(select1_rank0_x_1) => {
-                            match self.prev_0(select1_rank0_x_1) {
-                                Some(prev_zero_select1_rank0_x_1) => {
-                                    let result = select1_rank0_x_1 - prev_zero_select1_rank0_x_1;
-                                    Some(result)
-                                },
-                                None => {None}
-                            }
-                        },
-                        None => {None}
-                    }
-                },
-                None => {None}
-            }
+            return None;
         }
-        else {None}
+
+        let rank_0 = self.rank_select_structure.rank_0(x);
+        let normed_rank_0 = cmp::max(rank_0?, 1);
+        let y = self.rank_select_structure.select_1(normed_rank_0);
+        let normed_y = cmp::max(y?, 1);
+        let prev_0 = self.prev_0(normed_y);
+        Option::from(y? - prev_0?)
     }
 
 

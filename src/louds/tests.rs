@@ -81,7 +81,11 @@ fn test_child_rank(){
 }
 
 #[test]
-fn test_next_sibling(){}
+fn test_next_sibling(){
+    let louds = LOUDS::from_binary_representation(String::from("111101010000"));
+    assert_eq!(louds.next_sibling(5),Some(7));
+    assert_eq!(louds.next_sibling(7),Some(9));
+}
 
 #[test]
 fn test_degree(){}
