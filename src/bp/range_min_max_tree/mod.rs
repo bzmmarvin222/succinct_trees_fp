@@ -339,12 +339,12 @@ impl RangeMinMaxTree {
             None
         }
         else {
-            i -=1;
-            let mut pos = i;
+
             let k = match i%self.blocksize {
                     0 => i / self.blocksize,
                     _ => i / self.blocksize +1,
             };
+            i -=1;
             for j in (i+1) .. (k*self.blocksize) {
                 if self.bitvector[j as u64] {
                     d -= 1;
@@ -353,11 +353,12 @@ impl RangeMinMaxTree {
                     d +=1;
                 }
                 if d == 0 {
-                    return Some(j)
+                    return Some(j+1)
                 }
             }
-
             let mut node = (self.tree.len()/2 + k -1) as usize;
+            println!("node {:?}", node);
+            println!("d {:?}", d);
             return self.step2(node, i, d);
         }
     }
@@ -385,16 +386,20 @@ impl RangeMinMaxTree {
     fn step3(&self, mut node: usize, i: usize, mut d: i64) -> Option<usize> {
         if node >= (self.tree.len()/2) as usize{
             let mut pos = (node - self.tree.len()/2)*self.blocksize;
-            while d != 0 {
+            println!("length {:?}", self.bitvector.len());
+            loop {
                 if self.bitvector[pos as u64] {
                     d -= 1;
                 }
                 else {
                     d += 1;
                 }
+                if d == 0{
+                    break;
+                }
                 pos+=1;
             }
-            Some(pos)
+            Some(pos+1)
         }
         else {
             let lc = 2*node +1;

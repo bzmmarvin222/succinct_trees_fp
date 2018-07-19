@@ -313,3 +313,11 @@ fn invalid_bwdsearch_d() {
     let tree = RangeMinMaxTree::new(bitvec, 4);
     assert_eq!(tree.bwdsearch(6,i64::min_value()/2), None);
 }
+
+#[test]
+fn debug() {
+    let bitvec = bit_vec![true, true, true, false, true, false, false, true,
+                        false, false];
+    let tree = RangeMinMaxTree::new(bitvec, 8);
+    assert_eq!(tree.fwdsearch(1, -1).unwrap(),10);
+}
