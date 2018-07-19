@@ -10,7 +10,6 @@ fn test_serialize_deserialize() {
 }
 
 #[test]
-#[should_panic]
 fn test_from_braces_representation() {
     let bp = BalancedParentheses::from_braces_representation(String::from("()"));
     let expected_vec = bit_vec![true, false];
@@ -19,7 +18,11 @@ fn test_from_braces_representation() {
     let bp = BalancedParentheses::from_braces_representation(String::from("((()())())"));
     let expected_vec = bit_vec![true, true, true, false, true, false, false, true, false, false];
     assert_eq!(bp.vec, expected_vec);
+}
 
+#[test]
+#[should_panic]
+fn test_from_braces_representation_panic() {
     let bp_panic = BalancedParentheses::from_braces_representation(String::from("()abcd"));
 }
 

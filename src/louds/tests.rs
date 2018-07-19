@@ -7,7 +7,6 @@ use super::bv::*;
 // parenthesis sequence form test
 
 #[test]
-#[should_panic]
 fn test_from_binary_representation() {
     let louds = LOUDS::from_binary_representation(String::from("10"));
     let expected_vec = bit_vec![true, false];
@@ -16,7 +15,10 @@ fn test_from_binary_representation() {
     let louds = LOUDS::from_binary_representation(String::from("1110100100"));
     let expected_vec = bit_vec![true, true, true, false, true, false, false, true, false, false];
     assert_eq!(louds.vec, expected_vec);
-
+}
+#[test]
+#[should_panic]
+fn test_from_binary_representation_panic() {
     let louds_panic = LOUDS::from_binary_representation(String::from("10abcd"));
 }
 
