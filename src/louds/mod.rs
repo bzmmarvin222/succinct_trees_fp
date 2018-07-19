@@ -121,69 +121,6 @@ impl SuccinctTree<u8> for LOUDS {
     }
 
 
-    // number of siblings to the left of node x
-    fn child_rank(&self, x : u64) -> Option<u64> {
-        if self.index_represents_node(x)
-        {
-            match self.rank_select_structure.rank_0(x - 1) {
-                Some(rank0_x_1) => {
-                    match self.rank_select_structure.select_1(rank0_x_1) {
-                        Some(select1_rank0_x_1) => {
-                            match self.prev_0(select1_rank0_x_1) {
-                                Some(prev_zero_select1_rank0_x_1) => {
-                                    let result = select1_rank0_x_1 - prev_zero_select1_rank0_x_1;
-                                    Some(result)
-                                },
-                                None => {None}
-                            }
-                        },
-                        None => {None}
-                    }
-                },
-                None => {None}
-            }
-        }
-        else {None}
-    }
-
-
-    // next sibling (to the right) of node x
-    fn next_sibling(&self, x : u64) -> Option<u64> {
-        if self.index_represents_node(x)
-        {
-            match self.rank_select_structure.rank_0(x - 1) {
-                Some(rank0_x_1) => {
-                    match self.rank_select_structure.select_1(rank0_x_1 + 1) {
-                        Some(select1_rank0_x_1) => {
-                            self.rank_select_structure.select_0(select1_rank0_x_1 + 1)
-                        },
-                        None => {None}
-                    }
-                },
-                None => {None}
-            }
-        }
-        else {None}
-    }
-
-
-    // number of children of node x
-    fn degree(&self, x : u64) -> Option<u64> {
-        if self.index_represents_node(x)
-        {
-            match self.next_0(x) {
-                Some(next0_x) => {
-                    let result = next0_x - x;
-                    Some(result)
-                },
-                None => {None}
-            }
-        }
-        else
-        {None}
-    }
-
-
     // parent of node x
     fn parent(&self, x : u64) -> Option<u64> {
         if self.index_represents_node(x)
@@ -213,16 +150,20 @@ impl SuccinctTree<u8> for LOUDS {
     }
 
 
-    // i-th child of node x
-    fn child(&self, x : u64, i : u64) -> Option<u64> {
+    fn first_child(&self, x : u64) -> Option<u64> {
+        self.child(x,1)
+    }
+
+
+    // next sibling (to the right) of node x
+    fn next_sibling(&self, x : u64) -> Option<u64> {
         if self.index_represents_node(x)
         {
-            match self.rank_select_structure.rank_1(x) {
-                Some(rank1_x) => {
-                    match self.rank_select_structure.select_0(rank1_x + i) {
-                        Some(select0_rank1_x_i) => {
-                            let result = select0_rank1_x_i + 1;
-                            Some(result)
+            match self.rank_select_structure.rank_0(x - 1) {
+                Some(rank0_x_1) => {
+                    match self.rank_select_structure.select_1(rank0_x_1 + 1) {
+                        Some(select1_rank0_x_1) => {
+                            self.rank_select_structure.select_0(select1_rank0_x_1 + 1)
                         },
                         None => {None}
                     }
@@ -233,12 +174,6 @@ impl SuccinctTree<u8> for LOUDS {
         else {None}
     }
 
-    fn first_child(&self, x : u64) -> Option<u64> {
-        self.child(x,1)
-    }
-
-    //these functions need more than constant time
-    //to be implemented
 
     //returns whether x is an ansestor of y
     fn ancestor(&self, x : u64, c : u64) -> Option<bool>{
@@ -257,6 +192,7 @@ impl SuccinctTree<u8> for LOUDS {
         }
         None
     }
+
 
     //quantity of nodes in the path from root to c node
       fn depth(&self, c : u64) -> Option<u64>{
@@ -306,6 +242,70 @@ impl SuccinctTree<u8> for LOUDS {
             },
             None => {None}
         }
+    }
+
+    //these functions need more than constant time
+    //to be implemented
+
+    // i-th child of node x
+    fn child(&self, x : u64, i : u64) -> Option<u64> {
+        if self.index_represents_node(x)
+        {
+            match self.rank_select_structure.rank_1(x) {
+                Some(rank1_x) => {
+                    match self.rank_select_structure.select_0(rank1_x + i) {
+                        Some(select0_rank1_x_i) => {
+                            let result = select0_rank1_x_i + 1;
+                            Some(result)
+                        },
+                        None => {None}
+                    }
+                },
+                None => {None}
+            }
+        }
+        else {None}
+    }
+
+    // number of children of node x
+    fn degree(&self, x : u64) -> Option<u64> {
+        if self.index_represents_node(x)
+        {
+            match self.next_0(x) {
+                Some(next0_x) => {
+                    let result = next0_x - x;
+                    Some(result)
+                },
+                None => {None}
+            }
+        }
+        else
+        {None}
+    }
+
+    // number of siblings to the left of node x
+    fn child_rank(&self, x : u64) -> Option<u64> {
+        if self.index_represents_node(x)
+        {
+            match self.rank_select_structure.rank_0(x - 1) {
+                Some(rank0_x_1) => {
+                    match self.rank_select_structure.select_1(rank0_x_1) {
+                        Some(select1_rank0_x_1) => {
+                            match self.prev_0(select1_rank0_x_1) {
+                                Some(prev_zero_select1_rank0_x_1) => {
+                                    let result = select1_rank0_x_1 - prev_zero_select1_rank0_x_1;
+                                    Some(result)
+                                },
+                                None => {None}
+                            }
+                        },
+                        None => {None}
+                    }
+                },
+                None => {None}
+            }
+        }
+        else {None}
     }
 
 
