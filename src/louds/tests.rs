@@ -79,10 +79,20 @@ fn test_child_rank(){
 }
 
 #[test]
-fn test_next_sibling(){}
+fn test_next_sibling(){
+    let louds1 = LOUDS::from_binary_representation(String::from("111101010000"));
+    assert_eq!(louds1.next_sibling(1),None);
+    assert_eq!(louds1.next_sibling(10),None);
+    assert_eq!(louds1.next_sibling(5),Some(7));
+    assert_eq!(louds1.next_sibling(7),Some(9));
+}
 
 #[test]
-fn test_degree(){}
+fn test_degree(){
+    let louds1 = LOUDS::from_binary_representation(String::from("111101010000"));
+    assert_eq!(louds1.degree(1),Some(3));
+    assert_eq!(louds1.degree(7),Some(1));
+}
 
 #[test]
 fn test_parent(){}
